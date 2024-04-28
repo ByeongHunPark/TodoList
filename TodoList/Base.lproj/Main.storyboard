@@ -23,16 +23,17 @@
             </objects>
             <point key="canvasLocation" x="1302" y="425"/>
         </scene>
-        <!--View Controller-->
+        <!--Detail View Contoller-->
         <scene sceneID="Oip-2M-IJG">
             <objects>
-                <viewController id="dUd-5c-c3r" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="detail" id="dUd-5c-c3r" customClass="DetailViewContoller" customModule="TodoList" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="mw7-07-yCr">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <viewLayoutGuide key="safeArea" id="XKO-xA-Zae"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
+                    <navigationItem key="navigationItem" id="qs4-zV-m1l"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wo2-ca-Ub0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -57,11 +58,16 @@
         <!--할일 목록-->
         <scene sceneID="GWW-Lq-SzI">
             <objects>
-                <viewController id="hxI-YD-bXU" customClass="ViewController" customModule="TodoList" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="hxI-YD-bXU" customClass="TodoListViewContoller" customModule="TodoList" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="VCr-D2-UZd">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="V6r-fL-dhq">
+                                <rect key="frame" x="0.0" y="103" width="393" height="685"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </tableView>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Uit-Lx-oBa">
                                 <rect key="frame" x="0.0" y="796" width="406" height="56"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -82,6 +88,11 @@
                     <navigationItem key="navigationItem" title="할일 목록" id="Nfw-eA-FpM">
                         <barButtonItem key="rightBarButtonItem" style="plain" systemItem="add" id="9NK-cm-ugl"/>
                     </navigationItem>
+                    <connections>
+                        <outlet property="textField" destination="ipz-Gw-kOG" id="TSt-NS-m6H"/>
+                        <outlet property="textFieldView" destination="Uit-Lx-oBa" id="8Qw-ww-N1s"/>
+                        <outlet property="todoListTabelView" destination="V6r-fL-dhq" id="KhH-3s-Vn9"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="doo-rk-2SE" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
