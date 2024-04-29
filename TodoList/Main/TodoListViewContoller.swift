@@ -13,6 +13,9 @@ class TodoListViewContoller: UIViewController {
     @IBOutlet var textField : UITextField!
     @IBOutlet var todoListTabelView : UITableView!
     
+    var activityIndicator: UIActivityIndicatorView!
+    let overlayView = UIView(frame: UIScreen.main.bounds)
+    
     var vm = TodoListViewModel()
     
     override func viewDidLoad() {
@@ -21,18 +24,29 @@ class TodoListViewContoller: UIViewController {
         
         todoListTabelView.delegate = self
         todoListTabelView.dataSource = self
+        todoListTabelView.prefetchDataSource = self
         
         todoListTabelView.register(UINib(nibName: "TodoListTableCell", bundle: nil), forCellReuseIdentifier: "list_cell")
         
         textField.delegate = self
         
         self.hideKeyboardWhenTappedAround()
+        
+        vm.reloadData = { [weak self] in
+            DispatchQueue.main.async {
+                self?.todoListTabelView.reloadData()
+                self?.indicatorStart(false)
+            }
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        TodoAPI.shared.list { [weak self] listmodel in
-            self?.vm.todoList = listmodel
-        }
+        print("willAppear")
+        vm.todoList = []
+        vm.page = 1
+        indicatorStart(true)
+        fetchTodoList()
+        
     }
 
     private func setLayout(){
@@ -64,6 +78,39 @@ class TodoListViewContoller: UIViewController {
 //            make.bottom.equalToSuperview()
             make.left.right.equalToSuperview()
         }
+        
+        activityIndicator = UIActivityIndicatorView(style: .large)
+        activityIndicator.center = view.center
+        
+        view.addSubview(activityIndicator)
+    }
+    
+    func fetchTodoList() {
+        guard !vm.isFetching else { return }
+        vm.isFetching = true
+        
+        TodoAPI.shared.list(page: vm.page) { [weak self] result in
+            guard let self = self else { return }
+            
+            self.vm.todoList.append(contentsOf: result)
+            self.vm.page += 1
+            
+            DispatchQueue.main.async {
+                self.todoListTabelView.reloadData()
+                self.vm.isFetching = false
+                print(self.vm.todoList.count)
+            }
+        }
+    }
+    
+    func indicatorStart(_ start:Bool){
+        if start{
+            view.addSubview(overlayView)
+            activityIndicator.startAnimating()
+        }else{
+            overlayView.removeFromSuperview()
+            activityIndicator.stopAnimating()
+        }
     }
     
     @objc func keyboardDidShow(notification: Notification){
@@ -87,7 +134,6 @@ class TodoListViewContoller: UIViewController {
     }
     
     @IBAction func addTodoBtnClicked(_ sender: Any) {
-        print("add btn clicked")
         
         let vc = storyboard?.instantiateViewController(withIdentifier: "addView") as! AddViewController
         
@@ -109,8 +155,20 @@ extension TodoListViewContoller: UITextFieldDelegate{
     func textFieldShouldReturn(_ textField: UITextField) -> Bool{
         
         textField.resignFirstResponder()
-
+        filterTodoList(assignee: textField.text)
         return true
+    }
+    
+    private func filterTodoList(assignee: String?) {
+        guard let assignee = assignee, !assignee.isEmpty else {
+            vm.filteredTodoList = vm.todoList
+            todoListTabelView.reloadData()
+            return
+        }
+        
+        let lowercaseAssignee = assignee.lowercased()
+        vm.filteredTodoList = vm.todoList.filter { $0.assignee.lowercased().contains(lowercaseAssignee) }
+        todoListTabelView.reloadData()
     }
     
     @objc func dismissKeyboard() {
@@ -118,19 +176,14 @@ extension TodoListViewContoller: UITextFieldDelegate{
     }
 }
 
-extension TodoListViewContoller: UITableViewDelegate, UITableViewDataSource{
+extension TodoListViewContoller: UITableViewDelegate, UITableViewDataSource, UITableViewDataSourcePrefetching{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if vm.todoList.count > 20{
-            vm.tableCount = vm.page
+        if textField.text != "" && !textField.text!.isEmpty{
+            vm.tableCount = vm.filteredTodoList.count
         }else{
             vm.tableCount = vm.todoList.count
         }
-        
-        if textField.text != ""{
-            vm.tableCount = vm.searchTodoList.count
-        }
-        
-        
+            
         return vm.tableCount
     }
     
@@ -138,11 +191,26 @@ extension TodoListViewContoller: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "list_cell") as! TodoListTableCell
         
-        cell.assignee.text = "test"
-        cell.content.text = "testtesttesttesttesttest\ntesttesttesttesttest"
-        cell.create_at.text = "2024-04-28"
-        cell.thumbnail.image = UIImage(systemName: "pencil")
+        
 
+        if textField.text != "" && !textField.text!.isEmpty{
+            let formattedDateString = ChangeDate.convertDateString(self.vm.filteredTodoList[indexPath.row].create_at)
+            
+            cell.assignee.text = self.vm.filteredTodoList[indexPath.row].assignee
+            cell.content.text = self.vm.filteredTodoList[indexPath.row].content
+            cell.create_at.text = formattedDateString
+            cell.thumbnail.image = self.vm.filteredTodoList[indexPath.row].thumbnail
+        }else{
+            let formattedDateString = ChangeDate.convertDateString(self.vm.todoList[indexPath.row].create_at)
+            
+            cell.assignee.text = self.vm.todoList[indexPath.row].assignee
+            cell.content.text = self.vm.todoList[indexPath.row].content
+            cell.create_at.text = formattedDateString
+            cell.thumbnail.image = self.vm.todoList[indexPath.row].thumbnail
+        }
+        
+        
+        
         cell.selectionStyle = .none
         
         return cell
@@ -157,4 +225,19 @@ extension TodoListViewContoller: UITableViewDelegate, UITableViewDataSource{
         
         self.navigationController?.pushViewController(vc, animated: true)
     }
+    
+    func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+        
+        if textField.text == "" && textField.text!.isEmpty{
+            guard let lastIndexPath = indexPaths.last,
+                  lastIndexPath.row == vm.todoList.count - 1 else {
+                return
+            }
+            
+            
+            fetchTodoList()
+        }
+        
+    }
+    
 }

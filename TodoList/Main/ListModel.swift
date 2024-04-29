@@ -14,4 +14,7 @@ struct ListModel{
     let create_at: String
     let content : String
     let thumbnail: UIImage
+    let total: Int
+    let page: Int
+    let per: Int
 }

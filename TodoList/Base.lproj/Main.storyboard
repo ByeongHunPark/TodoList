@@ -18,10 +18,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9sX-eD-lbJ">
-                                <rect key="frame" x="0.0" y="103" width="393" height="1253"/>
+                                <rect key="frame" x="0.0" y="103" width="393" height="1062"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2dN-nK-C2V">
-                                        <rect key="frame" x="0.0" y="0.0" width="393" height="1256"/>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2dN-nK-C2V">
+                                        <rect key="frame" x="0.0" y="0.0" width="393" height="1070"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="assignee" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zXx-6B-laS">
                                                 <rect key="frame" x="8" y="8" width="67.666666666666671" height="21"/>
@@ -40,7 +40,7 @@
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits"/>
                                             </textField>
-                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="4cD-8s-8gD">
+                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="4cD-8s-8gD">
                                                 <rect key="frame" x="8" y="108" width="377" height="200"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
@@ -48,15 +48,17 @@
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                             </textView>
-                                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iPw-k4-2K9">
+                                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iPw-k4-2K9">
                                                 <rect key="frame" x="79" y="352" width="235" height="35"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="50" id="HSm-hf-0dC"/>
+                                                </constraints>
                                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain" title="Button"/>
                                             </button>
-                                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SYC-wM-v9J">
+                                            <view hidden="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SYC-wM-v9J">
                                                 <rect key="frame" x="8" y="316" width="377" height="402"/>
                                                 <subviews>
                                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="nmc-Oc-fJI">
@@ -82,11 +84,14 @@
                                             <constraint firstAttribute="trailing" secondItem="SYC-wM-v9J" secondAttribute="trailing" constant="8" id="5Im-iY-lSr"/>
                                             <constraint firstItem="zCi-fe-09n" firstAttribute="top" secondItem="zXx-6B-laS" secondAttribute="bottom" constant="8" id="7sI-pR-6RJ"/>
                                             <constraint firstAttribute="trailing" secondItem="4cD-8s-8gD" secondAttribute="trailing" constant="8" id="9lV-2Y-8f2"/>
+                                            <constraint firstItem="iPw-k4-2K9" firstAttribute="leading" secondItem="2dN-nK-C2V" secondAttribute="leading" constant="79" id="ABg-wb-TEU"/>
                                             <constraint firstItem="zXx-6B-laS" firstAttribute="leading" secondItem="2dN-nK-C2V" secondAttribute="leading" constant="8" id="NXm-fl-rej"/>
                                             <constraint firstItem="4cD-8s-8gD" firstAttribute="leading" secondItem="2dN-nK-C2V" secondAttribute="leading" constant="8" id="Vom-wv-1VD"/>
                                             <constraint firstItem="zXx-6B-laS" firstAttribute="top" secondItem="2dN-nK-C2V" secondAttribute="top" constant="8" id="aD9-jl-vxQ"/>
+                                            <constraint firstItem="iPw-k4-2K9" firstAttribute="top" secondItem="4cD-8s-8gD" secondAttribute="bottom" constant="44" id="cQn-uJ-C9c"/>
                                             <constraint firstItem="SYC-wM-v9J" firstAttribute="leading" secondItem="2dN-nK-C2V" secondAttribute="leading" constant="8" id="h2p-qM-fHN"/>
                                             <constraint firstItem="SYC-wM-v9J" firstAttribute="top" secondItem="4cD-8s-8gD" secondAttribute="bottom" constant="8" id="hmV-jx-ivS"/>
+                                            <constraint firstAttribute="trailing" secondItem="iPw-k4-2K9" secondAttribute="trailing" constant="79" id="kKx-s6-2A6"/>
                                             <constraint firstItem="ZhW-Tc-KLf" firstAttribute="top" secondItem="zCi-fe-09n" secondAttribute="bottom" constant="8" id="maj-u2-GoB"/>
                                             <constraint firstAttribute="trailing" secondItem="zCi-fe-09n" secondAttribute="trailing" constant="8" id="pzR-ba-TQ0"/>
                                             <constraint firstItem="zCi-fe-09n" firstAttribute="leading" secondItem="2dN-nK-C2V" secondAttribute="leading" constant="8" id="yxo-Nx-u2k"/>

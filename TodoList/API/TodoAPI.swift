@@ -14,9 +14,9 @@ class TodoAPI: ObservableObject{
     
     static let shared = TodoAPI()
     let url = Const.APIAddr
-    private init(){
-        
-    }
+//    private init(){
+//        
+//    }
     
     func downloadImage(from url: URL, completion: @escaping (UIImage?) -> Void) {
         AF.request(url).responseData { response in
@@ -30,10 +30,10 @@ class TodoAPI: ObservableObject{
         }
     }
     
-    func list(completion: @escaping ([ListModel]) -> Void){
-        let url = URL(string: url + "/todo/list")!
-        let test = URL(string: "http://127.0.0.1:8080/todo/list")!
-        AF.request(test, method: .get)
+    func list(page: Int, completion: @escaping ([ListModel]) -> Void){
+        let url = URL(string: url + "/todo/list?page=\(page)&per=20")!
+        
+        AF.request(url, method: .get)
             .validate()
             .responseData { response in
                 switch response.result{
@@ -41,64 +41,76 @@ class TodoAPI: ObservableObject{
                     do{
                         let json = try JSON(data: data)
                         
-                        guard let results = json["results"].arrayObject as? [[String: Any]] else {
-                            completion([])
-                            return
-                        }
+                        let status = json["status"].intValue
+                        let success = json["success"].stringValue
+                        let message = json["message"].stringValue
                         
-                        var listModels = [ListModel]()
-                        
-                        let group = DispatchGroup()
-                        let queue = DispatchQueue(label: "imageDownloadQueue", attributes: .concurrent)
-                        
-                        for result in results {
-                            if let id = result["id"] as? String,
-                               let assignee = result["assignee"] as? String,
-                               let create_at = result["createAt"] as? String,
-                               let content = result["content"] as? String,
-                               let thumbnail = result["contentImage"] as? String,
-                               let thumbnailUrl = URL(string: thumbnail)
-                            {
+                        if status == 200 && success == "TRUE" {
+                            let data = json["data"]
+                            let metadataData = data["metadata"]
+                            let itemsData = data["items"].arrayValue
+                            
+                            var listModels = [ListModel]()
+                            
+                            let total = metadataData["total"].intValue
+                            let page = metadataData["page"].intValue
+                            let per = metadataData["per"].intValue
+                            
+                            let group = DispatchGroup()
+                            let queue = DispatchQueue(label: "imageDownloadQueue", attributes: .concurrent)
+                            
+                            for item in itemsData {
+                                let id = item["id"].stringValue
+                                let assignee = item["assignee"].stringValue
+                                let create_at = item["createAt"].stringValue
+                                let content = item["content"].stringValue
+                                let thumbnail = item["contentImage"].stringValue
+                                
                                 group.enter()
                                 
-                                queue.async(group: group) {
-                                    self.downloadImage(from: thumbnailUrl) { thumbnailImage in
+                                if thumbnail != ""{
+                                    self.downloadImage(from: URL(string: thumbnail)!) { thumbnailImage in
                                         if let thumbnailImage = thumbnailImage{
                                             let listModel = ListModel(id: id,
                                                                       assignee: assignee,
                                                                       create_at: create_at,
                                                                       content: content,
-                                                                      thumbnail: thumbnailImage
+                                                                      thumbnail: thumbnailImage,
+                                                                      total: total,
+                                                                      page: page,
+                                                                      per: per
                                                                       
                                             )
                                             
-                                            DispatchQueue.main.async(flags: .barrier) {
-                                                objc_sync_enter(listModels)
-                                                listModels.append(listModel)
-                                                objc_sync_exit(listModels)
-                                            }
+                                            listModels.append(listModel)
                                         }
                                         
                                         group.leave()
                                     }
+                                }else{
+                                    let listModel = ListModel(id: id,
+                                                              assignee: assignee,
+                                                              create_at: create_at,
+                                                              content: content,
+                                                              thumbnail: UIImage(systemName: "photo")!,
+                                                              total: total,
+                                                              page: page,
+                                                              per: per
+                                                              
+                                    )
+                                    listModels.append(listModel)
+                                    group.leave()
                                 }
                             }
-                        }
-                        group.notify(queue: .main) {
-                            completion(listModels)
+                            group.notify(queue: .main) {
+                                completion(listModels)
+                            }
+                                
+                            
+                        } else {
+                            print("요청이 실패했습니다. 메시지: \(message)")
                         }
                         
-                        
-//                        group.notify(queue: .main) {
-//                            let sortedApps = results.compactMap { result -> ListModel? in
-//                                guard let name = result["trackName"] as? String else {
-//                                    return nil
-//                                }
-//                                return listModels.first { $0.assignee == name }
-//                            }
-//                            
-//                            completion(sortedApps)
-//                        }
                         
                     }catch {
                         print("SError: \(error)")

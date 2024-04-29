@@ -26,19 +26,18 @@ class TodoListViewModel {
 //    }
     
     
-    var todoList: [ListModel] = []
-//    {
-//        didSet{
-//            TodoAPI.shared.list { [ self] listModel in
-//                self?.todoList = listModel
-//            }
-//        }
-//    }
+//    var todoList = [ListModel]()
+    var todoList: [ListModel] = [] {
+        didSet {
+            reloadData?()
+        }
+    }
+    var reloadData: (() -> Void)?
     
-    var searchTodoList: [ListModel] = []
+    var filteredTodoList: [ListModel] = []
     
     var textFieldViewYValue = CGFloat(0)
-    var tableCount : Int = 0
-    var page : Int = 20
-    
+    var tableCount : Int = 20
+    var page : Int = 1
+    var isFetching : Bool = false
 }

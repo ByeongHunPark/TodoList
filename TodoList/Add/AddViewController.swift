@@ -21,6 +21,7 @@ class AddViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        assigneeTextField.delegate = self
         contentTextView.delegate = self
         setLayout()
     }
@@ -37,8 +38,8 @@ class AddViewController: UIViewController {
         contentTextView.text = "내용을 입력하세요"
         contentTextView.textColor = UIColor.systemGray4
         
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidShow), name: UIResponder.keyboardDidShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidShow), name: UIResponder.keyboardDidShowNotification, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         
 //        assigneeTextField.snp.makeConstraints { make in
 //            make.height.equalTo(50)
@@ -56,25 +57,25 @@ class AddViewController: UIViewController {
         addBtn.layer.cornerRadius = 10
     }
     
-    @objc func keyboardDidShow(notification: Notification){
-        
-        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue{
-            if vm.textFieldViewYValue == 0{
-                vm.textFieldViewYValue = self.textFieldView.frame.origin.y
-            }
-            
-            if self.textFieldView.frame.origin.y == vm.textFieldViewYValue{
-                vm.textFieldViewYValue = self.textFieldView.frame.origin.y
-                self.textFieldView.frame.origin.y -= keyboardSize.height
-            }
-        }
-    }
-    
-    @objc func keyboardWillHide(notification: Notification){
-        if self.textFieldView.frame.origin.y != vm.textFieldViewYValue{
-            self.textFieldView.frame.origin.y = vm.textFieldViewYValue
-        }
-    }
+//    @objc func keyboardDidShow(notification: Notification){
+//        
+//        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue{
+//            if vm.textFieldViewYValue == 0{
+//                vm.textFieldViewYValue = self.textFieldView.frame.origin.y
+//            }
+//            
+//            if self.textFieldView.frame.origin.y == vm.textFieldViewYValue{
+//                vm.textFieldViewYValue = self.textFieldView.frame.origin.y
+//                self.textFieldView.frame.origin.y -= keyboardSize.height
+//            }
+//        }
+//    }
+//    
+//    @objc func keyboardWillHide(notification: Notification){
+//        if self.textFieldView.frame.origin.y != vm.textFieldViewYValue{
+//            self.textFieldView.frame.origin.y = vm.textFieldViewYValue
+//        }
+//    }
     
     @IBAction func cancelBtnClicked(_ sender: Any) {
         self.dismiss(animated: false)
@@ -100,6 +101,13 @@ extension AddViewController: UITextViewDelegate{
             }
         }
     }
+    
+    func textViewShouldReturn(_ textView: UITextView) -> Bool{
+        textView.resignFirstResponder()
+        
+        return true
+    }
+    
 }
 
 extension AddViewController: UITextFieldDelegate{
