@@ -13,7 +13,7 @@ class TodoListViewContoller: UIViewController {
     @IBOutlet var textField : UITextField!
     @IBOutlet var todoListTabelView : UITableView!
     
-    var textFieldViewYValue = CGFloat(0)
+    var vm : TodoListViewModel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,9 +24,15 @@ class TodoListViewContoller: UIViewController {
         
         todoListTabelView.register(UINib(nibName: "TodoListTableCell", bundle: nil), forCellReuseIdentifier: "list_cell")
         
-        textField.delegate
+        textField.delegate = self
         
         self.hideKeyboardWhenTappedAround()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        TodoAPI.shared.list { [weak self] listmodel in
+            self?.vm.todoList = listmodel
+        }
     }
 
     private func setLayout(){
@@ -62,20 +68,20 @@ class TodoListViewContoller: UIViewController {
     
     @objc func keyboardDidShow(notification: Notification){
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue{
-            if textFieldViewYValue == 0{
-                textFieldViewYValue = self.textFieldView.frame.origin.y
+            if vm.textFieldViewYValue == 0{
+                vm.textFieldViewYValue = self.textFieldView.frame.origin.y
             }
             
-            if self.textFieldView.frame.origin.y == textFieldViewYValue{
-                textFieldViewYValue = self.textFieldView.frame.origin.y
+            if self.textFieldView.frame.origin.y == vm.textFieldViewYValue{
+                vm.textFieldViewYValue = self.textFieldView.frame.origin.y
                 self.textFieldView.frame.origin.y -= keyboardSize.height
             }
         }
     }
     
     @objc func keyboardWillHide(notification: Notification){
-        if self.textFieldView.frame.origin.y != textFieldViewYValue{
-            self.textFieldView.frame.origin.y = textFieldViewYValue
+        if self.textFieldView.frame.origin.y != vm.textFieldViewYValue{
+            self.textFieldView.frame.origin.y = vm.textFieldViewYValue
         }
     }
     
@@ -89,8 +95,11 @@ extension TodoListViewContoller: UITextFieldDelegate{
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool{
-//        textField.resignFirstResponder()
         
+        
+        
+        textField.resignFirstResponder()
+//        dismissKeyboard()
         return true
     }
     
@@ -101,7 +110,18 @@ extension TodoListViewContoller: UITextFieldDelegate{
 
 extension TodoListViewContoller: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        if vm.todoList.count > 20{
+            vm.tableCount = vm.page
+        }else{
+            vm.tableCount = vm.todoList.count
+        }
+        
+        if textField.text != ""{
+            vm.tableCount = vm.searchTodoList.count
+        }
+        
+        
+        return vm.tableCount
     }
     
     
