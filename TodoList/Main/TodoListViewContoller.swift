@@ -13,7 +13,7 @@ class TodoListViewContoller: UIViewController {
     @IBOutlet var textField : UITextField!
     @IBOutlet var todoListTabelView : UITableView!
     
-    var vm : TodoListViewModel!
+    var vm = TodoListViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,7 +37,7 @@ class TodoListViewContoller: UIViewController {
 
     private func setLayout(){
         textFieldView.snp.makeConstraints { make in
-            make.left.right.bottom.equalToSuperview()
+            make.left.right.equalToSuperview()
             make.height.equalTo(58)
         }
         
@@ -55,8 +55,8 @@ class TodoListViewContoller: UIViewController {
         
         textField.placeholder = "검색어를 입력하세요"
         
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidShow), name: UIResponder.keyboardDidShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         
         todoListTabelView.snp.makeConstraints { make in
             make.top.equalToSuperview()
@@ -67,6 +67,7 @@ class TodoListViewContoller: UIViewController {
     }
     
     @objc func keyboardDidShow(notification: Notification){
+        
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue{
             if vm.textFieldViewYValue == 0{
                 vm.textFieldViewYValue = self.textFieldView.frame.origin.y
@@ -96,10 +97,8 @@ extension TodoListViewContoller: UITextFieldDelegate{
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool{
         
-        
-        
         textField.resignFirstResponder()
-//        dismissKeyboard()
+
         return true
     }
     

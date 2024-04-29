@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-struct ListModel : Hashable{
+struct ListModel{
     let id: String
     let assignee: String
     let create_at: String

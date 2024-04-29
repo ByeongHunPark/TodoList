@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-struct TodoListViewModel {
+class TodoListViewModel {
 //    var scan: Scan {
 //        didSet {
 //            if editEnable {
@@ -26,7 +26,7 @@ struct TodoListViewModel {
 //    }
     
     
-    var todoList: [ListModel]
+    var todoList: [ListModel] = []
 //    {
 //        didSet{
 //            TodoAPI.shared.list { [ self] listModel in
@@ -35,7 +35,7 @@ struct TodoListViewModel {
 //        }
 //    }
     
-    var searchTodoList: [ListModel]
+    var searchTodoList: [ListModel] = []
     
     var textFieldViewYValue = CGFloat(0)
     var tableCount : Int = 0

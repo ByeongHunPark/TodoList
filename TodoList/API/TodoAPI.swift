@@ -32,8 +32,8 @@ class TodoAPI: ObservableObject{
     
     func list(completion: @escaping ([ListModel]) -> Void){
         let url = URL(string: url + "/todo/list")!
-        
-        AF.request(url, method: .get)
+        let test = URL(string: "http://127.0.0.1:8080/todo/list")!
+        AF.request(test, method: .get)
             .validate()
             .responseData { response in
                 switch response.result{
@@ -59,9 +59,9 @@ class TodoAPI: ObservableObject{
                                let thumbnail = result["contentImage"] as? String,
                                let thumbnailUrl = URL(string: thumbnail)
                             {
-//                                group.enter()
+                                group.enter()
                                 
-//                                queue.async(group: group) {
+                                queue.async(group: group) {
                                     self.downloadImage(from: thumbnailUrl) { thumbnailImage in
                                         if let thumbnailImage = thumbnailImage{
                                             let listModel = ListModel(id: id,
@@ -72,19 +72,22 @@ class TodoAPI: ObservableObject{
                                                                       
                                             )
                                             
-//                                            DispatchQueue.main.async(flags: .barrier) {
-//                                                objc_sync_enter(listModels)
-//                                                listModels.append(listModel)
-//                                                objc_sync_exit(listModels)
-//                                            }
+                                            DispatchQueue.main.async(flags: .barrier) {
+                                                objc_sync_enter(listModels)
+                                                listModels.append(listModel)
+                                                objc_sync_exit(listModels)
+                                            }
                                         }
                                         
-//                                        group.leave()
+                                        group.leave()
                                     }
-//                                }
+                                }
                             }
                         }
-                        completion(listModels)
+                        group.notify(queue: .main) {
+                            completion(listModels)
+                        }
+                        
                         
 //                        group.notify(queue: .main) {
 //                            let sortedApps = results.compactMap { result -> ListModel? in
@@ -98,11 +101,11 @@ class TodoAPI: ObservableObject{
 //                        }
                         
                     }catch {
-                        print("Error: \(error)")
+                        print("SError: \(error)")
                         completion([])
                     }
                 case .failure(let error):
-                    print("Error: \(error)")
+                    print("FError: \(error)")
                     completion([])
                 }
             }
