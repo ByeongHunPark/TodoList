@@ -86,6 +86,17 @@ class TodoListViewContoller: UIViewController {
         }
     }
     
+    @IBAction func addTodoBtnClicked(_ sender: Any) {
+        print("add btn clicked")
+        
+        let vc = storyboard?.instantiateViewController(withIdentifier: "addView") as! AddViewController
+        
+        vc.modalPresentationStyle = .fullScreen
+        present(vc, animated: false)
+        
+        
+    }
+    
 }
 
 extension TodoListViewContoller: UITextFieldDelegate{
