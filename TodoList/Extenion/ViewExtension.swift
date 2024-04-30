@@ -47,7 +47,7 @@ extension UIViewController{
             let formattedDateString = dateFormatter.string(from: date)
             return formattedDateString
         } else {
-            return nil
+            return "2024-04-30 19:00:00"
         }
     }
     

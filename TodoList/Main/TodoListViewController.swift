@@ -200,14 +200,14 @@ extension TodoListViewController: UITableViewDelegate, UITableViewDataSource, UI
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "list_cell") as! TodoListTableCell
         
-//        let formattedDateString = convertDateString(self.vm.todoList[indexPath.row].create_at == "" ? "2024-04-30 19:00:00" : self.vm.todoList[indexPath.row].create_at)
+//        let formattedDateString = convertDateString(self.vm.todoList[indexPath.row].create_at)
 //        cell.assignee.text = self.vm.todoList[indexPath.row].assignee
 //        cell.content.text = self.vm.todoList[indexPath.row].content
 //        cell.create_at.text = formattedDateString
 //        cell.thumbnail.image = self.vm.todoList[indexPath.row].thumbnail
         
         cell.assignee.text = "qqweqweqwe"
-        cell.content.text = "qwewww"
+        cell.content.text = "qwewww\naskdasddsadasddddd\naksd"
         cell.create_at.text = "2024-04-30 19:00:00"
         cell.thumbnail.image = UIImage(systemName: "photo")
         
@@ -224,7 +224,7 @@ extension TodoListViewController: UITableViewDelegate, UITableViewDataSource, UI
         let vc = storyboard?.instantiateViewController(withIdentifier: "detail") as! DetailViewController
         
 //        TodoAPI.shared.detail(id: self.vm.todoList[indexPath.row].id) { result in
-//        let formattedDateString = self.convertDateString(result.create_at == "" ? "2024-04-30 19:00:00" : result.create_at)
+//        let formattedDateString = self.convertDateString(result.create_at)
 //            vc.vm.assignee = result.assignee
 //            vc.vm.content = result.content
 //            vc.vm.create = formattedDateString!
@@ -232,7 +232,7 @@ extension TodoListViewController: UITableViewDelegate, UITableViewDataSource, UI
 //        }
         
         vc.vm.assignee = "qqweqweqwe"
-        vc.vm.content = "qwewww\n\n\n\n\n\n\n\n\n\nasd"
+        vc.vm.content = "qwewwwnasd\naklsddd\nasdㅁdd"
         vc.vm.create = "2024-04-30 19:00:00"
         vc.vm.thumbnail = UIImage(systemName: "photo")
         
@@ -270,7 +270,7 @@ extension TodoListViewController: SendDelegate{
         TodoAPI.shared.detail(id: id) { result in
             print(result)
             
-            let formattedDateString = self.convertDateString(result.create_at == "" ? "2024-04-30 19:00:00" : result.create_at)
+            let formattedDateString = self.convertDateString(result.create_at)
             vc.vm.assignee = result.assignee
             vc.vm.content = result.content
             vc.vm.create = formattedDateString!

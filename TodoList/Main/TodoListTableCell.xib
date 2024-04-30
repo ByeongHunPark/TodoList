@@ -38,10 +38,10 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cV3-Ae-wXZ">
-                        <rect key="frame" x="108" y="54.333333333333343" width="332" height="40.666666666666657"/>
+                        <rect key="frame" x="108" y="46.333333333333343" width="332" height="36"/>
                         <string key="text">{content} {content}
 test</string>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
@@ -52,10 +52,10 @@ test</string>
                     <constraint firstItem="lAg-PH-pAb" firstAttribute="top" secondItem="CmS-yP-TzI" secondAttribute="top" id="88Q-AS-JVe"/>
                     <constraint firstItem="cV3-Ae-wXZ" firstAttribute="leading" secondItem="tws-Ip-v9l" secondAttribute="trailing" constant="8" id="EM5-ki-VGv"/>
                     <constraint firstItem="tws-Ip-v9l" firstAttribute="top" secondItem="CmS-yP-TzI" secondAttribute="top" id="Ehi-FH-3nd"/>
+                    <constraint firstItem="cV3-Ae-wXZ" firstAttribute="top" secondItem="Emi-0k-hWL" secondAttribute="bottom" constant="8" id="eC6-3d-COC"/>
                     <constraint firstItem="tws-Ip-v9l" firstAttribute="height" secondItem="CmS-yP-TzI" secondAttribute="height" id="fMf-Dq-u3W"/>
                     <constraint firstAttribute="trailing" secondItem="Emi-0k-hWL" secondAttribute="trailing" id="fu4-Vn-kEn"/>
                     <constraint firstItem="tws-Ip-v9l" firstAttribute="leading" secondItem="CmS-yP-TzI" secondAttribute="leading" id="g90-hj-GCj"/>
-                    <constraint firstItem="cV3-Ae-wXZ" firstAttribute="top" secondItem="Emi-0k-hWL" secondAttribute="bottom" constant="16" id="i73-Vd-Gyx"/>
                     <constraint firstItem="Emi-0k-hWL" firstAttribute="leading" secondItem="tws-Ip-v9l" secondAttribute="trailing" constant="8" id="nEe-Gh-oRV"/>
                     <constraint firstItem="Emi-0k-hWL" firstAttribute="top" secondItem="lAg-PH-pAb" secondAttribute="bottom" id="rhB-mp-Oaf"/>
                     <constraint firstItem="lAg-PH-pAb" firstAttribute="leading" secondItem="tws-Ip-v9l" secondAttribute="trailing" constant="8" id="tHv-PL-LQv"/>
@@ -73,7 +73,7 @@ test</string>
     </objects>
     <resources>
         <systemColor name="systemGray2Color">
-            <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.68235294120000001" green="0.68235294120000001" blue="0.69803921570000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

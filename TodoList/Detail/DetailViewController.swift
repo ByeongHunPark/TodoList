@@ -47,6 +47,14 @@ class DetailViewController: UIViewController{
         contentTextView.layer.cornerRadius = 5
         contentTextView.isScrollEnabled = false
         
+        btnView.layer.masksToBounds = false
+        btnView.layer.shadowColor = UIColor.black.cgColor
+        btnView.layer.shadowOffset = CGSize(width: 0, height: -1)
+        btnView.layer.shadowOpacity = 0.6
+        
+        cancelBtn.layer.cornerRadius = 10
+        addBtn.layer.cornerRadius = 10
+        
     }
     
     @IBAction func cancelBtnClicked(_ sender: Any) {
