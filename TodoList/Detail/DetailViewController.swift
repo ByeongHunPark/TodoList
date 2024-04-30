@@ -26,12 +26,15 @@ class DetailViewController: UIViewController{
         assigneeTextField.delegate = self
         contentTextView.delegate = self
         
-        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+        self.hideKeyboardWhenTappedAround()
         
+//        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+//        swipeRecognizer()
         setLayout()
     }
     
     private func setLayout(){
+        
         assigneeTextField.text = vm.assignee
         contentTextView.text = vm.content
         createTextField.text = vm.create
@@ -47,35 +50,61 @@ class DetailViewController: UIViewController{
     }
     
     @IBAction func cancelBtnClicked(_ sender: Any) {
-        print("cancel")
-        self.dismiss(animated: false)
-        
+        self.navigationController?.popViewController(animated: true)
     }
     
     @IBAction func addBtnClicked(_ sender: Any) {
         if assigneeTextField.text!.count > 20{
-            
+            showToast(message: "담당자 명은 최대 20자까지 작성할 수 있습니다.\n(\(assigneeTextField.text!.count)/20)")
+            return
         }
         
         if contentTextView.text.count > 300{
             showToast(message: "할 일 내용은 최대 300자까지 작성할 수 있습니다.\n(\(contentTextView.text!.count)/300)")
+            return
         }
         
-        if assigneeTextField.text!.count > 20 || contentTextView.text.count > 300{
-            let message = assigneeTextField.text!.count > 20 ? "담당자 명은 최대 20자까지 작성할 수 있습니다.\n(\(assigneeTextField.text!.count)/20)" : "할 일 내용은 최대 300자까지 작성할 수 있습니다.\n(\(contentTextView.text!.count)/300)"
-            
-            showToast(message: message)
-        }else{
-            if assigneeTextField.text! != vm.assignee && contentTextView.text != vm.content{
-                TodoAPI.shared.editDetail(id: vm.id,
-                                          assignee: assigneeTextField.text!,
-                                          content: contentTextView.text) { result in
-                    self.showToast(message: result)
+        if assigneeTextField.text! != vm.assignee && contentTextView.text != vm.content{
+            TodoAPI.shared.editDetail(id: vm.id,
+                                      assignee: assigneeTextField.text!,
+                                      content: contentTextView.text) { [self] result, status in
+                if status{
+                    assigneeTextField.text = result.assignee
+                    contentTextView.text = result.content
+                    createTextField.text = result.create_at
+                    thumbnailImage.image = result.thumbnail
+                    
+                    showToast(message: "저장되었습니다.")
+                }else{
+                    showToast(message: "저장에 실패하였습니다.")
                 }
             }
         }
     }
     
+    func swipeRecognizer() {
+        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(self.respondToSwipeGesture(_:)))
+        swipeRight.direction = UISwipeGestureRecognizer.Direction.right
+        self.view.addGestureRecognizer(swipeRight)
+    }
+    
+    @objc func respondToSwipeGesture(_ gesture: UIGestureRecognizer){
+        if let swipeGesture = gesture as? UISwipeGestureRecognizer {
+            switch swipeGesture.direction{
+            case UISwipeGestureRecognizer.Direction.right:
+                // 스와이프 시, 원하는 기능 구현.
+                print("asdasdasd")
+                let confirmAction = UIAlertAction(title: "확인", style: .default) { _ in
+                    self.dismiss(animated: true, completion: nil)
+                }
+                
+                showAlert("수정중인 내용이 있습니다.\n이대로 진행할까요?", confirmAction)
+                
+                self.dismiss(animated: true, completion: nil)
+            default: break
+            }
+        }
+    }
     
 }
 
@@ -101,12 +130,7 @@ extension DetailViewController: UITextFieldDelegate, UITextViewDelegate{
             }
         }
     }
-    
-    func textFieldDidChangeSelection(_ textField: UITextField) {
-        //        if textField.text?.count
         
-    }
-    
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         //        if let char = text.cString(using: String.Encoding.utf8) {
         //            let isBackSpace = strcmp(char, "\\b")
@@ -149,8 +173,15 @@ extension DetailViewController: UITextFieldDelegate, UITextViewDelegate{
     
 }
 
-extension DetailViewController: UIGestureRecognizerDelegate {
-    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
-    }
-}
+//extension DetailViewController: UIGestureRecognizerDelegate {
+//    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+//        
+//        let confirmAction = UIAlertAction(title: "확인", style: .default) { _ in
+//            print("확인")
+//        }
+//        
+//        showAlert("확인", confirmAction)
+//        
+//        return true
+//    }
+//}

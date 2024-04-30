@@ -35,10 +35,10 @@ class TodoListViewModel {
     
     var reloadData: (() -> Void)?
     
-    var filteredTodoList: [ListModel] = []
-    
     var textFieldViewYValue = CGFloat(0)
     var tableCount : Int = 20
     var page : Int = 1
     var isFetching : Bool = false
+    
+    var add : String = ""
 }

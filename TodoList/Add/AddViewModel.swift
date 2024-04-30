@@ -10,4 +10,8 @@ import UIKit
 
 class AddViewModel {
     var textFieldViewYValue = CGFloat(0)
+    var imageName : String = ""
+    
+    let textViewPlaceHolder = "내용을 입력하세요"
+    
 }

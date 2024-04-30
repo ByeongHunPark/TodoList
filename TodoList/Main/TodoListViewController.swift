@@ -74,7 +74,6 @@ class TodoListViewController: UIViewController {
         todoListTabelView.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.bottom.equalTo(textFieldView.snp.top)
-//            make.bottom.equalToSuperview()
             make.left.right.equalToSuperview()
         }
         
@@ -82,6 +81,10 @@ class TodoListViewController: UIViewController {
         activityIndicator.center = view.center
         
         view.addSubview(activityIndicator)
+        
+        let backBarButtonItem = UIBarButtonItem(title: "뒤로", style: .plain, target: self, action: nil)
+        self.navigationItem.backBarButtonItem = backBarButtonItem
+        
     }
     
     func fetchTodoList(_ assignee: String? = nil) {
@@ -98,7 +101,6 @@ class TodoListViewController: UIViewController {
                 DispatchQueue.main.async {
                     self.todoListTabelView.reloadData()
                     self.vm.isFetching = false
-                    print(self.vm.todoList.count)
                 }
             }
         }else{
@@ -111,7 +113,6 @@ class TodoListViewController: UIViewController {
                 DispatchQueue.main.async {
                     self.todoListTabelView.reloadData()
                     self.vm.isFetching = false
-                    print(self.vm.todoList.count)
                 }
             }
         }
@@ -150,9 +151,9 @@ class TodoListViewController: UIViewController {
     @IBAction func addTodoBtnClicked(_ sender: Any) {
         
         let vc = storyboard?.instantiateViewController(withIdentifier: "addView") as! AddViewController
-        
+        vc.sendDelegate = self
         vc.modalPresentationStyle = .fullScreen
-        present(vc, animated: false)
+        present(vc, animated: true)
         
         
     }
@@ -191,24 +192,24 @@ extension TodoListViewController: UITableViewDelegate, UITableViewDataSource, UI
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         vm.tableCount = vm.todoList.count
         
-        return vm.tableCount
-//        return 1
+//        return vm.tableCount
+        return 1
     }
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "list_cell") as! TodoListTableCell
         
-        let formattedDateString = convertDateString(self.vm.todoList[indexPath.row].create_at)
-        cell.assignee.text = self.vm.todoList[indexPath.row].assignee
-        cell.content.text = self.vm.todoList[indexPath.row].content
-        cell.create_at.text = formattedDateString
-        cell.thumbnail.image = self.vm.todoList[indexPath.row].thumbnail
+//        let formattedDateString = convertDateString(self.vm.todoList[indexPath.row].create_at == "" ? "2024-04-30 19:00:00" : self.vm.todoList[indexPath.row].create_at)
+//        cell.assignee.text = self.vm.todoList[indexPath.row].assignee
+//        cell.content.text = self.vm.todoList[indexPath.row].content
+//        cell.create_at.text = formattedDateString
+//        cell.thumbnail.image = self.vm.todoList[indexPath.row].thumbnail
         
-//        cell.assignee.text = "qqweqweqwe"
-//        cell.content.text = "qwewww"
-//        cell.create_at.text = "2024-04-30 19:00:00"
-//        cell.thumbnail.image = UIImage(systemName: "photo")
+        cell.assignee.text = "qqweqweqwe"
+        cell.content.text = "qwewww"
+        cell.create_at.text = "2024-04-30 19:00:00"
+        cell.thumbnail.image = UIImage(systemName: "photo")
         
         cell.selectionStyle = .none
         
@@ -222,18 +223,18 @@ extension TodoListViewController: UITableViewDelegate, UITableViewDataSource, UI
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let vc = storyboard?.instantiateViewController(withIdentifier: "detail") as! DetailViewController
         
-        TodoAPI.shared.detail(id: self.vm.todoList[indexPath.row].id) { result in
-            let formattedDateString = self.convertDateString(result.create_at)
-            vc.vm.assignee = result.assignee
-            vc.vm.content = result.content
-            vc.vm.create = formattedDateString!
-            vc.vm.thumbnail = result.thumbnail
-        }
+//        TodoAPI.shared.detail(id: self.vm.todoList[indexPath.row].id) { result in
+//        let formattedDateString = self.convertDateString(result.create_at == "" ? "2024-04-30 19:00:00" : result.create_at)
+//            vc.vm.assignee = result.assignee
+//            vc.vm.content = result.content
+//            vc.vm.create = formattedDateString!
+//            vc.vm.thumbnail = result.thumbnail
+//        }
         
-//        vc.vm.assignee = "qqweqweqwe"
-//        vc.vm.content = "qwewww\n\n\n\n\n\n\n\n\n\nasd"
-//        vc.vm.create = "2024-04-30 19:00:00"
-//        vc.vm.thumbnail = UIImage(systemName: "photo")
+        vc.vm.assignee = "qqweqweqwe"
+        vc.vm.content = "qwewww\n\n\n\n\n\n\n\n\n\nasd"
+        vc.vm.create = "2024-04-30 19:00:00"
+        vc.vm.thumbnail = UIImage(systemName: "photo")
         
         self.navigationController?.pushViewController(vc, animated: true)
     }
@@ -256,4 +257,31 @@ extension TodoListViewController: UITableViewDelegate, UITableViewDataSource, UI
         
     }
     
+}
+
+protocol SendDelegate{
+    func sendId(_ id: String)
+}
+
+extension TodoListViewController: SendDelegate{
+    func sendId(_ id: String) {
+        let vc = storyboard?.instantiateViewController(withIdentifier: "detail") as! DetailViewController
+        
+        TodoAPI.shared.detail(id: id) { result in
+            print(result)
+            
+            let formattedDateString = self.convertDateString(result.create_at == "" ? "2024-04-30 19:00:00" : result.create_at)
+            vc.vm.assignee = result.assignee
+            vc.vm.content = result.content
+            vc.vm.create = formattedDateString!
+            vc.vm.thumbnail = result.thumbnail
+        }
+        
+//        vc.vm.assignee = "qqweqweqwe"
+//        vc.vm.content = "qwewww\n\n\n\n\n\n\n\n\n\nasd"
+//        vc.vm.create = "2024-04-30 19:00:00"
+//        vc.vm.thumbnail = UIImage(systemName: "photo")
+        
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
 }

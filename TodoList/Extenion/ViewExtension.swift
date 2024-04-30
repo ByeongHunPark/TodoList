@@ -63,8 +63,8 @@ extension UIViewController{
             handler: nil
         )
         
-        alertVC.addAction(cancelAction)
         alertVC.addAction(confirmAction)
+        alertVC.addAction(cancelAction)
         self.present(alertVC, animated: true, completion: nil)
     }
 }

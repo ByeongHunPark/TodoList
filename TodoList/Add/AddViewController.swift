@@ -27,7 +27,8 @@ class AddViewController: UIViewController {
     var vm = AddViewModel()
     
     let imagePicker = UIImagePickerController()
-    let textViewPlaceHolder = "내용을 입력하세요"
+    
+    var sendDelegate: SendDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,7 +50,7 @@ class AddViewController: UIViewController {
         contentTextView.layer.cornerRadius = 5
         contentTextView.isScrollEnabled = false
         
-        contentTextView.text = textViewPlaceHolder
+        contentTextView.text = vm.textViewPlaceHolder
         contentTextView.textColor = UIColor.systemGray4
         
         addBtnView.layer.masksToBounds = false
@@ -113,16 +114,37 @@ class AddViewController: UIViewController {
     }
     
     @IBAction func addBtnClicked(_ sender: Any) {
-        print("add")
-        self.dismiss(animated: false)
+        if assigneeTextField.text!.count > 20 || contentTextView.text.count > 300{
+            let message = assigneeTextField.text!.count > 20 ? "담당자 명은 최대 20자까지 작성할 수 있습니다.\n(\(assigneeTextField.text!.count)/20)" : "할 일 내용은 최대 300자까지 작성할 수 있습니다.\n(\(contentTextView.text!.count)/300)"
+            
+            showToast(message: message)
+            
+            return
+        }
+        
+        
+        if assigneeTextField.text != "" && !assigneeTextField.text!.isEmpty && (contentTextView.text != "" && contentTextView.text != vm.textViewPlaceHolder) && (!contentTextView.text!.isEmpty  && contentTextView.text != vm.textViewPlaceHolder) && pickedImageView.image != nil{
+            
+            TodoAPI.shared.addTodo(assignee: assigneeTextField.text!,
+                                   content: contentTextView.text,
+                                   imageFile: pickedImageView.image!,
+                                   imageName: vm.imageName) { result in
+                if result != "실패"{
+                    self.dismiss(animated: true)
+                    self.sendDelegate?.sendId(result)
+                }else{
+                    self.showToast(message: "추가에 실패하셨습니다.")
+                }
+            }
+        }else{
+            let message = assigneeTextField.text == "" ? "assignee" : (contentTextView.text != "" && contentTextView.text != vm.textViewPlaceHolder) ? "content" : "image"
+            
+            showToast(message: "\(message)는 필수 항목입니다.")
+        }
     }
     
     @IBAction func cancelBtnClicked(_ sender: Any) {
-//        if contentTextView.text == textViewPlaceHolder{
-//            contentTextView.text = ""
-//        }
-        
-        if assigneeTextField.text != "" || !assigneeTextField.text!.isEmpty || (contentTextView.text != "" && contentTextView.text != textViewPlaceHolder) || (!contentTextView.text!.isEmpty  && contentTextView.text != textViewPlaceHolder) || pickedImageView.image != nil{
+        if assigneeTextField.text != "" || !assigneeTextField.text!.isEmpty || (contentTextView.text != "" && contentTextView.text != vm.textViewPlaceHolder) || (!contentTextView.text!.isEmpty  && contentTextView.text != vm.textViewPlaceHolder) || pickedImageView.image != nil{
             
             let confirmAction = UIAlertAction(title: "확인", style: .default) { _ in
                 self.dismiss(animated: false)
@@ -138,7 +160,7 @@ class AddViewController: UIViewController {
 
 extension AddViewController: UITextFieldDelegate, UITextViewDelegate{
     func textViewDidBeginEditing(_ textView: UITextView) {
-        if textView.text == textViewPlaceHolder {
+        if textView.text == vm.textViewPlaceHolder {
             textView.text = nil
             textView.textColor = .black
         }
@@ -146,7 +168,7 @@ extension AddViewController: UITextFieldDelegate, UITextViewDelegate{
     
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            textView.text = textViewPlaceHolder
+            textView.text = vm.textViewPlaceHolder
             textView.textColor = .lightGray
         }
     }
@@ -173,41 +195,36 @@ extension AddViewController: UITextFieldDelegate, UITextViewDelegate{
         }
     }
     
-    func textFieldDidChangeSelection(_ textField: UITextField) {
-//        if textField.text?.count
-        
-    }
-    
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        if let char = text.cString(using: String.Encoding.utf8) {
-            let isBackSpace = strcmp(char, "\\b")
-            if isBackSpace == -92 {
-                return true
-            }
-        }
-        
-        guard textView.text!.count < 300 else {
-            textView.resignFirstResponder()
-            showToast(message: "할 일 내용은 최대 300자까지 작성할 수 있습니다.\n(\(textView.text!.count)/300)")
-            return false
-        }
+//        if let char = text.cString(using: String.Encoding.utf8) {
+//            let isBackSpace = strcmp(char, "\\b")
+//            if isBackSpace == -92 {
+//                return true
+//            }
+//        }
+//        
+//        guard textView.text!.count < 300 else {
+//            textView.resignFirstResponder()
+//            showToast(message: "할 일 내용은 최대 300자까지 작성할 수 있습니다.\n(\(textView.text!.count)/300)")
+//            return false
+//        }
         
         return true
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        if let char = string.cString(using: String.Encoding.utf8) {
-            let isBackSpace = strcmp(char, "\\b")
-            if isBackSpace == -92 {
-                return true
-            }
-        }
-        
-        guard textField.text!.count < 20 else {
-            textField.resignFirstResponder()
-            showToast(message: "담당자 명은 최대 20자까지 작성할 수 있습니다.\n(\(textField.text!.count)/20)")
-            return false
-        }
+//        if let char = string.cString(using: String.Encoding.utf8) {
+//            let isBackSpace = strcmp(char, "\\b")
+//            if isBackSpace == -92 {
+//                return true
+//            }
+//        }
+//        
+//        guard textField.text!.count < 20 else {
+//            textField.resignFirstResponder()
+//            showToast(message: "담당자 명은 최대 20자까지 작성할 수 있습니다.\n(\(textField.text!.count)/20)")
+//            return false
+//        }
         
         return true
     }
@@ -229,6 +246,7 @@ extension AddViewController: UIImagePickerControllerDelegate, UINavigationContro
             if let imageUrl = info[UIImagePickerController.InfoKey.imageURL] as? URL {
                 let imageName = imageUrl.lastPathComponent
                 print("Image Name: \(imageName)")
+                vm.imageName = imageName
             }
         }
         imageView.isHidden = false

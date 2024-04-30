@@ -113,6 +113,7 @@ class TodoAPI: ObservableObject{
                             
                         } else {
                             print("요청이 실패했습니다. 메시지: \(message)")
+                            completion([])
                         }
                         
                         
@@ -127,13 +128,14 @@ class TodoAPI: ObservableObject{
             }
     }
     
-    func addTodo(assignee: String , content: String, imageFile: UIImage, imageName: String,completion: @escaping (DetailModel) -> Void){
+    func addTodo(assignee: String , content: String, imageFile: UIImage, imageName: String,completion: @escaping (String) -> Void){
         guard let imageData = imageFile.jpegData(compressionQuality: 1.0) else {
             print("이미지 데이터를 변환하는 데 문제가 있습니다.")
             return
         }
         
         let url = URL(string: baseUrl + "/todo")!
+        var id = ""
         
         AF.upload(multipartFormData: { multipartFormData in
             multipartFormData.append(Data(assignee.utf8), withName: "assignee")
@@ -144,19 +146,38 @@ class TodoAPI: ObservableObject{
         .responseData { response in
             switch response.result {
             case .success(let data):
-                print("저장되었습니다.")
+                do{
+                    let json = try JSON(data: data)
+                    
+                    let status = json["status"].intValue
+                    let success = json["success"].stringValue
+                    let message = json["message"].stringValue
+                    
+                    if status == 200 && success == "TRUE" {
+                        let data = json["data"]
+                        let idValue = data["id"].stringValue
+                        
+                        id = idValue
+                    } else {
+                        print("요청이 실패했습니다. 메시지: \(message)")
+                        completion("실패")
+                    }
+                }catch {
+                    print("SError: \(error)")
+                    completion("실패")
+                }
+                completion(id)
             case .failure(let error):
                 print("FError: \(error)")
-                print("저장에 실패하였습니다.")
+                completion("실패")
             }
         }
-        
     }
     
     func detail(id: String, completion: @escaping (DetailModel) -> Void){
         let url = URL(string: baseUrl + "/todo/\(id)")!
         
-        var detailModel = DetailModel(id: "", assignee: "", create_at: "", content: "", thumbnail: UIImage(systemName: "photo")!)
+        var detailModel = DetailModel(id: "error", assignee: "error", create_at: "2024-04-30 19:00:00", content: "error", thumbnail: UIImage(systemName: "photo")!)
         
         AF.request(url, method: .get)
             .validate()
@@ -215,6 +236,7 @@ class TodoAPI: ObservableObject{
                             
                         } else {
                             print("요청이 실패했습니다. 메시지: \(message)")
+                            completion(detailModel)
                         }
                     }catch {
                         print("SError: \(error)")
@@ -227,7 +249,7 @@ class TodoAPI: ObservableObject{
             }
     }
     
-    func editDetail(id: String, assignee: String , content: String, completion: @escaping (String) -> Void){
+    func editDetail(id: String, assignee: String , content: String, completion: @escaping (DetailModel, Bool) -> Void){
         let url = URL(string: baseUrl + "/todo/\(id)")!
         
         let parameters: [String: Any] = [
@@ -235,15 +257,74 @@ class TodoAPI: ObservableObject{
             "content": content
         ]
         
+        var detailModel = DetailModel(id: "", assignee: "", create_at: "", content: "", thumbnail: UIImage(systemName: "photo")!)
+        
         AF.request(url, method: .put, parameters: parameters)
             .validate()
             .responseData { response in
                 switch response.result {
                 case .success(let data):
-                    completion("저장되었습니다.")
+                    do{
+                        let json = try JSON(data: data)
+                        
+                        let status = json["status"].intValue
+                        let success = json["success"].stringValue
+                        let message = json["message"].stringValue
+                        
+                        if status == 200 && success == "TRUE" {
+                            let data = json["data"]
+                            
+                            let id = data["id"].stringValue
+                            let assignee = data["assignee"].stringValue
+                            let create_at = data["createAt"].stringValue
+                            let content = data["content"].stringValue
+                            let contentImage = data["contentImage"].stringValue
+                            
+                            let group = DispatchGroup()
+                            let queue = DispatchQueue(label: "imageDownloadQueue", attributes: .concurrent)
+                            
+                            group.enter()
+                            
+                            if contentImage != ""{
+                                self.downloadImage(from: URL(string: contentImage)!) { thumbnailImage in
+                                    if let thumbnailImage = thumbnailImage{
+                                        detailModel = DetailModel(id: id,
+                                                                  assignee: assignee,
+                                                                  create_at: create_at,
+                                                                  content: content,
+                                                                  thumbnail: thumbnailImage
+                                        )
+                                    }
+                                    
+                                    group.leave()
+                                }
+                            }else{
+                                detailModel = DetailModel(id: id,
+                                                          assignee: assignee,
+                                                          create_at: create_at,
+                                                          content: content,
+                                                          thumbnail: UIImage(systemName: "photo")!
+                                                          
+                                )
+                                
+                                group.leave()
+                            }
+                            
+                            group.notify(queue: .main) {
+                                completion(detailModel, true)
+                            }
+                            
+                        } else {
+                            print("요청이 실패했습니다. 메시지: \(message)")
+                            completion(detailModel, false)
+                        }
+                    }catch {
+                        print("SError: \(error)")
+                        completion(detailModel, false)
+                    }
                 case .failure(let error):
                     print("FError: \(error)")
-                    completion("저장에 실패하였습니다.")
+                    completion(detailModel, false)
                 }
             }
     }
