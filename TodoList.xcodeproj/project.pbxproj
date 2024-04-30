@@ -18,7 +18,7 @@
 		1400FCC22BE0ABF5006AE450 /* DetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1400FCC12BE0ABF5006AE450 /* DetailModel.swift */; };
 		1474675F2BDB38CB00A9FB86 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1474675E2BDB38CB00A9FB86 /* AppDelegate.swift */; };
 		147467612BDB38CB00A9FB86 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 147467602BDB38CB00A9FB86 /* SceneDelegate.swift */; };
-		147467632BDB38CB00A9FB86 /* TodoListViewContoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 147467622BDB38CB00A9FB86 /* TodoListViewContoller.swift */; };
+		147467632BDB38CB00A9FB86 /* TodoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 147467622BDB38CB00A9FB86 /* TodoListViewController.swift */; };
 		147467662BDB38CB00A9FB86 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 147467652BDB38CB00A9FB86 /* Base */; };
 		147467682BDB38CD00A9FB86 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 147467672BDB38CD00A9FB86 /* Assets.xcassets */; };
 		1474676B2BDB38CD00A9FB86 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 1474676A2BDB38CD00A9FB86 /* Base */; };
@@ -26,7 +26,7 @@
 		6CF19E162BDD405E00C2032A /* TodoAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CF19E152BDD405E00C2032A /* TodoAPI.swift */; };
 		6CF19E182BDE6B0000C2032A /* TodoListTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6CF19E172BDE6B0000C2032A /* TodoListTableCell.xib */; };
 		6CF19E1A2BDE6B4A00C2032A /* TodoListTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CF19E192BDE6B4A00C2032A /* TodoListTableCell.swift */; };
-		6CF19E1C2BDE941D00C2032A /* DetailViewContoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CF19E1B2BDE941D00C2032A /* DetailViewContoller.swift */; };
+		6CF19E1C2BDE941D00C2032A /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CF19E1B2BDE941D00C2032A /* DetailViewController.swift */; };
 		6CF19E1F2BDF9CD200C2032A /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 6CF19E1E2BDF9CD200C2032A /* SwiftyJSON */; };
 /* End PBXBuildFile section */
 
@@ -41,7 +41,7 @@
 		1474675B2BDB38CB00A9FB86 /* TodoList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TodoList.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1474675E2BDB38CB00A9FB86 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		147467602BDB38CB00A9FB86 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		147467622BDB38CB00A9FB86 /* TodoListViewContoller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoListViewContoller.swift; sourceTree = "<group>"; };
+		147467622BDB38CB00A9FB86 /* TodoListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoListViewController.swift; sourceTree = "<group>"; };
 		147467652BDB38CB00A9FB86 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		147467672BDB38CD00A9FB86 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1474676A2BDB38CD00A9FB86 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -50,7 +50,7 @@
 		6CF19E152BDD405E00C2032A /* TodoAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoAPI.swift; sourceTree = "<group>"; };
 		6CF19E172BDE6B0000C2032A /* TodoListTableCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TodoListTableCell.xib; sourceTree = "<group>"; };
 		6CF19E192BDE6B4A00C2032A /* TodoListTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoListTableCell.swift; sourceTree = "<group>"; };
-		6CF19E1B2BDE941D00C2032A /* DetailViewContoller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewContoller.swift; sourceTree = "<group>"; };
+		6CF19E1B2BDE941D00C2032A /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,7 +114,7 @@
 		6CF19E092BDD3B3400C2032A /* Main */ = {
 			isa = PBXGroup;
 			children = (
-				147467622BDB38CB00A9FB86 /* TodoListViewContoller.swift */,
+				147467622BDB38CB00A9FB86 /* TodoListViewController.swift */,
 				1400FCA62BDF3484006AE450 /* TodoListViewModel.swift */,
 				6CF19E172BDE6B0000C2032A /* TodoListTableCell.xib */,
 				6CF19E192BDE6B4A00C2032A /* TodoListTableCell.swift */,
@@ -126,7 +126,7 @@
 		6CF19E0A2BDD3B4600C2032A /* Detail */ = {
 			isa = PBXGroup;
 			children = (
-				6CF19E1B2BDE941D00C2032A /* DetailViewContoller.swift */,
+				6CF19E1B2BDE941D00C2032A /* DetailViewController.swift */,
 				1400FCBF2BE09055006AE450 /* DetailViewModel.swift */,
 				1400FCC12BE0ABF5006AE450 /* DetailModel.swift */,
 			);
@@ -250,12 +250,12 @@
 				1400FCB42BDF71B5006AE450 /* AddViewModel.swift in Sources */,
 				1400FCB22BDF5ABC006AE450 /* AddViewController.swift in Sources */,
 				1400FCC22BE0ABF5006AE450 /* DetailModel.swift in Sources */,
-				147467632BDB38CB00A9FB86 /* TodoListViewContoller.swift in Sources */,
+				147467632BDB38CB00A9FB86 /* TodoListViewController.swift in Sources */,
 				6CF19E162BDD405E00C2032A /* TodoAPI.swift in Sources */,
 				6CF19E1A2BDE6B4A00C2032A /* TodoListTableCell.swift in Sources */,
 				6CF19E0F2BDD3CC600C2032A /* Const.swift in Sources */,
 				1400FCA72BDF3484006AE450 /* TodoListViewModel.swift in Sources */,
-				6CF19E1C2BDE941D00C2032A /* DetailViewContoller.swift in Sources */,
+				6CF19E1C2BDE941D00C2032A /* DetailViewController.swift in Sources */,
 				1474675F2BDB38CB00A9FB86 /* AppDelegate.swift in Sources */,
 				1400FCC02BE09055006AE450 /* DetailViewModel.swift in Sources */,
 				147467612BDB38CB00A9FB86 /* SceneDelegate.swift in Sources */,

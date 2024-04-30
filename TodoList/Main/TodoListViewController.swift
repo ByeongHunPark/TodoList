@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  TodoListViewController.swift
 //  TodoList
 //
 //  Created by 박병훈 on 4/26/24.
@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class TodoListViewContoller: UIViewController {
+class TodoListViewController: UIViewController {
     @IBOutlet var textFieldView : UIView!
     @IBOutlet var textField : UITextField!
     @IBOutlet var todoListTabelView : UITableView!
@@ -159,7 +159,7 @@ class TodoListViewContoller: UIViewController {
     
 }
 
-extension TodoListViewContoller: UITextFieldDelegate{
+extension TodoListViewController: UITextFieldDelegate{
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool{
         if vm.page != 1{
@@ -187,7 +187,7 @@ extension TodoListViewContoller: UITextFieldDelegate{
     }
 }
 
-extension TodoListViewContoller: UITableViewDelegate, UITableViewDataSource, UITableViewDataSourcePrefetching{
+extension TodoListViewController: UITableViewDelegate, UITableViewDataSource, UITableViewDataSourcePrefetching{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         vm.tableCount = vm.todoList.count
         
@@ -220,7 +220,7 @@ extension TodoListViewContoller: UITableViewDelegate, UITableViewDataSource, UIT
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let vc = storyboard?.instantiateViewController(withIdentifier: "detail") as! DetailViewContoller
+        let vc = storyboard?.instantiateViewController(withIdentifier: "detail") as! DetailViewController
         
         TodoAPI.shared.detail(id: self.vm.todoList[indexPath.row].id) { result in
             let formattedDateString = self.convertDateString(result.create_at)

@@ -195,10 +195,10 @@
             </objects>
             <point key="canvasLocation" x="2078.6259541984732" y="633.45070422535218"/>
         </scene>
-        <!--Detail View Contoller-->
+        <!--Detail View Controller-->
         <scene sceneID="Oip-2M-IJG">
             <objects>
-                <viewController storyboardIdentifier="detail" id="dUd-5c-c3r" customClass="DetailViewContoller" customModule="TodoList" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="detail" id="dUd-5c-c3r" customClass="DetailViewController" customModule="TodoList" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="mw7-07-yCr">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="944"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -375,7 +375,7 @@
         <!--할일 목록-->
         <scene sceneID="GWW-Lq-SzI">
             <objects>
-                <viewController id="hxI-YD-bXU" customClass="TodoListViewContoller" customModule="TodoList" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="hxI-YD-bXU" customClass="TodoListViewController" customModule="TodoList" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="VCr-D2-UZd">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

@@ -227,7 +227,7 @@ class TodoAPI: ObservableObject{
             }
     }
     
-    func editDetail(id: String, assignee: String , content: String, completion: @escaping (DetailModel) -> Void){
+    func editDetail(id: String, assignee: String , content: String, completion: @escaping (String) -> Void){
         let url = URL(string: baseUrl + "/todo/\(id)")!
         
         let parameters: [String: Any] = [
@@ -240,10 +240,10 @@ class TodoAPI: ObservableObject{
             .responseData { response in
                 switch response.result {
                 case .success(let data):
-                    print("저장되었습니다.")
+                    completion("저장되었습니다.")
                 case .failure(let error):
                     print("FError: \(error)")
-                    print("저장에 실패하였습니다.")
+                    completion("저장에 실패하였습니다.")
                 }
             }
     }
