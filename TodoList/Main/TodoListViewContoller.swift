@@ -55,7 +55,6 @@ class TodoListViewContoller: UIViewController {
             make.height.equalTo(58)
         }
         
-//        textFieldView.layer.borderWidth = 1
         textFieldView.layer.masksToBounds = false
         textFieldView.layer.shadowColor = UIColor.black.cgColor
         textFieldView.layer.shadowOffset = CGSize(width: 0, height: -1)
@@ -146,11 +145,6 @@ class TodoListViewContoller: UIViewController {
 }
 
 extension TodoListViewContoller: UITextFieldDelegate{
-    func hideKeyboardWhenTappedAround() {
-        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        tap.cancelsTouchesInView = false
-        view.addGestureRecognizer(tap)
-    }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool{
         
@@ -169,10 +163,6 @@ extension TodoListViewContoller: UITextFieldDelegate{
         let lowercaseAssignee = assignee.lowercased()
         vm.filteredTodoList = vm.todoList.filter { $0.assignee.lowercased().contains(lowercaseAssignee) }
         todoListTabelView.reloadData()
-    }
-    
-    @objc func dismissKeyboard() {
-        view.endEditing(true)
     }
 }
 

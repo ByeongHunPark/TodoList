@@ -10,9 +10,10 @@
 		1400FCA52BDF3479006AE450 /* ListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1400FCA42BDF3479006AE450 /* ListModel.swift */; };
 		1400FCA72BDF3484006AE450 /* TodoListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1400FCA62BDF3484006AE450 /* TodoListViewModel.swift */; };
 		1400FCAA2BDF34D2006AE450 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 1400FCA92BDF34D2006AE450 /* Alamofire */; };
-		1400FCAD2BDF34E1006AE450 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 1400FCAC2BDF34E1006AE450 /* SnapKit */; };
 		1400FCB22BDF5ABC006AE450 /* AddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1400FCB12BDF5ABC006AE450 /* AddViewController.swift */; };
 		1400FCB42BDF71B5006AE450 /* AddViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1400FCB32BDF71B5006AE450 /* AddViewModel.swift */; };
+		1400FCB72BE05D19006AE450 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 1400FCB62BE05D19006AE450 /* SnapKit */; };
+		1400FCBB2BE06356006AE450 /* ViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1400FCBA2BE06356006AE450 /* ViewExtension.swift */; };
 		1474675F2BDB38CB00A9FB86 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1474675E2BDB38CB00A9FB86 /* AppDelegate.swift */; };
 		147467612BDB38CB00A9FB86 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 147467602BDB38CB00A9FB86 /* SceneDelegate.swift */; };
 		147467632BDB38CB00A9FB86 /* TodoListViewContoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 147467622BDB38CB00A9FB86 /* TodoListViewContoller.swift */; };
@@ -33,6 +34,7 @@
 		1400FCA62BDF3484006AE450 /* TodoListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodoListViewModel.swift; sourceTree = "<group>"; };
 		1400FCB12BDF5ABC006AE450 /* AddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AddViewController.swift; path = TodoList/Add/AddViewController.swift; sourceTree = SOURCE_ROOT; };
 		1400FCB32BDF71B5006AE450 /* AddViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddViewModel.swift; sourceTree = "<group>"; };
+		1400FCBA2BE06356006AE450 /* ViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtension.swift; sourceTree = "<group>"; };
 		1474675B2BDB38CB00A9FB86 /* TodoList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TodoList.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1474675E2BDB38CB00A9FB86 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		147467602BDB38CB00A9FB86 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -54,15 +56,23 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1400FCB72BE05D19006AE450 /* SnapKit in Frameworks */,
 				6CF19E1F2BDF9CD200C2032A /* SwiftyJSON in Frameworks */,
 				1400FCAA2BDF34D2006AE450 /* Alamofire in Frameworks */,
-				1400FCAD2BDF34E1006AE450 /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1400FCBC2BE06364006AE450 /* Extenion */ = {
+			isa = PBXGroup;
+			children = (
+				1400FCBA2BE06356006AE450 /* ViewExtension.swift */,
+			);
+			path = Extenion;
+			sourceTree = "<group>";
+		};
 		147467522BDB38CB00A9FB86 = {
 			isa = PBXGroup;
 			children = (
@@ -83,6 +93,7 @@
 		1474675D2BDB38CB00A9FB86 /* TodoList */ = {
 			isa = PBXGroup;
 			children = (
+				1400FCBC2BE06364006AE450 /* Extenion */,
 				6CF19E0D2BDD3CB700C2032A /* Util */,
 				6CF19E092BDD3B3400C2032A /* Main */,
 				6CF19E0B2BDD3B5A00C2032A /* Add */,
@@ -169,8 +180,8 @@
 			name = TodoList;
 			packageProductDependencies = (
 				1400FCA92BDF34D2006AE450 /* Alamofire */,
-				1400FCAC2BDF34E1006AE450 /* SnapKit */,
 				6CF19E1E2BDF9CD200C2032A /* SwiftyJSON */,
+				1400FCB62BE05D19006AE450 /* SnapKit */,
 			);
 			productName = TodoList;
 			productReference = 1474675B2BDB38CB00A9FB86 /* TodoList.app */;
@@ -202,8 +213,8 @@
 			mainGroup = 147467522BDB38CB00A9FB86;
 			packageReferences = (
 				1400FCA82BDF34D1006AE450 /* XCRemoteSwiftPackageReference "Alamofire" */,
-				1400FCAB2BDF34E1006AE450 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				6CF19E1D2BDF9CD200C2032A /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
+				1400FCB52BE05D19006AE450 /* XCRemoteSwiftPackageReference "SnapKit" */,
 			);
 			productRefGroup = 1474675C2BDB38CB00A9FB86 /* Products */;
 			projectDirPath = "";
@@ -245,6 +256,7 @@
 				1474675F2BDB38CB00A9FB86 /* AppDelegate.swift in Sources */,
 				147467612BDB38CB00A9FB86 /* SceneDelegate.swift in Sources */,
 				1400FCA52BDF3479006AE450 /* ListModel.swift in Sources */,
+				1400FCBB2BE06356006AE450 /* ViewExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -399,6 +411,7 @@
 				DEVELOPMENT_TEAM = P8F3338MA4;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TodoList/Info.plist;
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "앨범 접근을 허용하시겠습니까?";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -428,6 +441,7 @@
 				DEVELOPMENT_TEAM = P8F3338MA4;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TodoList/Info.plist;
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "앨범 접근을 허용하시겠습니까?";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -479,7 +493,7 @@
 				minimumVersion = 5.9.1;
 			};
 		};
-		1400FCAB2BDF34E1006AE450 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+		1400FCB52BE05D19006AE450 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit";
 			requirement = {
@@ -503,9 +517,9 @@
 			package = 1400FCA82BDF34D1006AE450 /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
 		};
-		1400FCAC2BDF34E1006AE450 /* SnapKit */ = {
+		1400FCB62BE05D19006AE450 /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 1400FCAB2BDF34E1006AE450 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			package = 1400FCB52BE05D19006AE450 /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
 		};
 		6CF19E1E2BDF9CD200C2032A /* SwiftyJSON */ = {
