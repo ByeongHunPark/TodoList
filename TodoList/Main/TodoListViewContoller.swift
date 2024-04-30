@@ -84,20 +84,35 @@ class TodoListViewContoller: UIViewController {
         view.addSubview(activityIndicator)
     }
     
-    func fetchTodoList() {
+    func fetchTodoList(_ assignee: String? = nil) {
         guard !vm.isFetching else { return }
         vm.isFetching = true
         
-        TodoAPI.shared.list(page: vm.page) { [weak self] result in
-            guard let self = self else { return }
-            
-            self.vm.todoList.append(contentsOf: result)
-            self.vm.page += 1
-            
-            DispatchQueue.main.async {
-                self.todoListTabelView.reloadData()
-                self.vm.isFetching = false
-                print(self.vm.todoList.count)
+        if assignee == nil{
+            TodoAPI.shared.list(page: vm.page) { [weak self] result in
+                guard let self = self else { return }
+                
+                self.vm.todoList.append(contentsOf: result)
+                self.vm.page += 1
+                
+                DispatchQueue.main.async {
+                    self.todoListTabelView.reloadData()
+                    self.vm.isFetching = false
+                    print(self.vm.todoList.count)
+                }
+            }
+        }else{
+            TodoAPI.shared.list(page: vm.page, assignee: assignee) { [weak self] result in
+                guard let self = self else { return }
+                
+                self.vm.todoList.append(contentsOf: result)
+                self.vm.page += 1
+                
+                DispatchQueue.main.async {
+                    self.todoListTabelView.reloadData()
+                    self.vm.isFetching = false
+                    print(self.vm.todoList.count)
+                }
             }
         }
     }
@@ -154,27 +169,33 @@ extension TodoListViewContoller: UITextFieldDelegate{
     }
     
     private func filterTodoList(assignee: String?) {
-        guard let assignee = assignee, !assignee.isEmpty else {
-            vm.filteredTodoList = vm.todoList
-            todoListTabelView.reloadData()
-            return
-        }
+//        guard let assignee = assignee, !assignee.isEmpty else {
+//            vm.filteredTodoList = vm.todoList
+//            todoListTabelView.reloadData()
+//            return
+//        }
+//        
+//        let lowercaseAssignee = assignee.lowercased()
+//        vm.filteredTodoList = vm.todoList.filter { $0.assignee.lowercased().contains(lowercaseAssignee) }
         
-        let lowercaseAssignee = assignee.lowercased()
-        vm.filteredTodoList = vm.todoList.filter { $0.assignee.lowercased().contains(lowercaseAssignee) }
+        fetchTodoList(assignee)
+        
         todoListTabelView.reloadData()
     }
 }
 
 extension TodoListViewContoller: UITableViewDelegate, UITableViewDataSource, UITableViewDataSourcePrefetching{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if textField.text != "" && !textField.text!.isEmpty{
-            vm.tableCount = vm.filteredTodoList.count
-        }else{
+//        if textField.text != "" && !textField.text!.isEmpty{
+//            vm.tableCount = vm.filteredTodoList.count
+//        }else{
             vm.tableCount = vm.todoList.count
-        }
+//        }
             
         return vm.tableCount
+        
+//        return 1
+        
     }
     
     
@@ -184,14 +205,14 @@ extension TodoListViewContoller: UITableViewDelegate, UITableViewDataSource, UIT
         
 
         if textField.text != "" && !textField.text!.isEmpty{
-            let formattedDateString = ChangeDate.convertDateString(self.vm.filteredTodoList[indexPath.row].create_at)
+            let formattedDateString = convertDateString(self.vm.filteredTodoList[indexPath.row].create_at)
             
             cell.assignee.text = self.vm.filteredTodoList[indexPath.row].assignee
             cell.content.text = self.vm.filteredTodoList[indexPath.row].content
             cell.create_at.text = formattedDateString
             cell.thumbnail.image = self.vm.filteredTodoList[indexPath.row].thumbnail
         }else{
-            let formattedDateString = ChangeDate.convertDateString(self.vm.todoList[indexPath.row].create_at)
+            let formattedDateString = convertDateString(self.vm.todoList[indexPath.row].create_at)
             
             cell.assignee.text = self.vm.todoList[indexPath.row].assignee
             cell.content.text = self.vm.todoList[indexPath.row].content
@@ -199,7 +220,10 @@ extension TodoListViewContoller: UITableViewDelegate, UITableViewDataSource, UIT
             cell.thumbnail.image = self.vm.todoList[indexPath.row].thumbnail
         }
         
-        
+//        cell.assignee.text = "qqweqweqwe"
+//        cell.content.text = "qwewww"
+//        cell.create_at.text = "2024-04-30 19:00:00"
+//        cell.thumbnail.image = UIImage(systemName: "photo")
         
         cell.selectionStyle = .none
         
@@ -212,6 +236,29 @@ extension TodoListViewContoller: UITableViewDelegate, UITableViewDataSource, UIT
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let vc = storyboard?.instantiateViewController(withIdentifier: "detail") as! DetailViewContoller
+        
+//        if textField.text != "" && !textField.text!.isEmpty{
+//            let formattedDateString = convertDateString(self.vm.filteredTodoList[indexPath.row].create_at)
+////            vc.vm.assignee = self.vm.filteredTodoList[indexPath.row].assignee
+////            vc.vm.content = self.vm.filteredTodoList[indexPath.row].content
+////            vc.vm.create = formattedDateString!
+////            vc.vm.thumbnail = self.vm.filteredTodoList[indexPath.row].thumbnail
+//            vc.vm.id = self.vm.filteredTodoList[indexPath.row].id
+//        }else{
+//            let formattedDateString = convertDateString(self.vm.todoList[indexPath.row].create_at)
+////            vc.vm.assignee = self.vm.todoList[indexPath.row].assignee
+////            vc.vm.content = self.vm.todoList[indexPath.row].content
+////            vc.vm.create = formattedDateString!
+////            vc.vm.thumbnail = self.vm.todoList[indexPath.row].thumbnail
+            vc.vm.id = self.vm.todoList[indexPath.row].id
+//        }
+        
+        
+//        vc.vm.assignee = "qqweqweqwe"
+//        vc.vm.content = "qwewww\n\n\n\n\n\n\n\n\n\nasd"
+//        vc.vm.create = "2024-04-30 19:00:00"
+//        vc.vm.thumbnail = UIImage(systemName: "photo")
+        
         
         self.navigationController?.pushViewController(vc, animated: true)
     }

@@ -14,6 +14,7 @@
 		1400FCB42BDF71B5006AE450 /* AddViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1400FCB32BDF71B5006AE450 /* AddViewModel.swift */; };
 		1400FCB72BE05D19006AE450 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 1400FCB62BE05D19006AE450 /* SnapKit */; };
 		1400FCBB2BE06356006AE450 /* ViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1400FCBA2BE06356006AE450 /* ViewExtension.swift */; };
+		1400FCC02BE09055006AE450 /* DetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1400FCBF2BE09055006AE450 /* DetailViewModel.swift */; };
 		1474675F2BDB38CB00A9FB86 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1474675E2BDB38CB00A9FB86 /* AppDelegate.swift */; };
 		147467612BDB38CB00A9FB86 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 147467602BDB38CB00A9FB86 /* SceneDelegate.swift */; };
 		147467632BDB38CB00A9FB86 /* TodoListViewContoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 147467622BDB38CB00A9FB86 /* TodoListViewContoller.swift */; };
@@ -26,7 +27,6 @@
 		6CF19E1A2BDE6B4A00C2032A /* TodoListTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CF19E192BDE6B4A00C2032A /* TodoListTableCell.swift */; };
 		6CF19E1C2BDE941D00C2032A /* DetailViewContoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CF19E1B2BDE941D00C2032A /* DetailViewContoller.swift */; };
 		6CF19E1F2BDF9CD200C2032A /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 6CF19E1E2BDF9CD200C2032A /* SwiftyJSON */; };
-		6CF19E222BDFB7D900C2032A /* ChangeDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CF19E212BDFB7D900C2032A /* ChangeDate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +35,7 @@
 		1400FCB12BDF5ABC006AE450 /* AddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AddViewController.swift; path = TodoList/Add/AddViewController.swift; sourceTree = SOURCE_ROOT; };
 		1400FCB32BDF71B5006AE450 /* AddViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddViewModel.swift; sourceTree = "<group>"; };
 		1400FCBA2BE06356006AE450 /* ViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtension.swift; sourceTree = "<group>"; };
+		1400FCBF2BE09055006AE450 /* DetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewModel.swift; sourceTree = "<group>"; };
 		1474675B2BDB38CB00A9FB86 /* TodoList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TodoList.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1474675E2BDB38CB00A9FB86 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		147467602BDB38CB00A9FB86 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -48,7 +49,6 @@
 		6CF19E172BDE6B0000C2032A /* TodoListTableCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TodoListTableCell.xib; sourceTree = "<group>"; };
 		6CF19E192BDE6B4A00C2032A /* TodoListTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoListTableCell.swift; sourceTree = "<group>"; };
 		6CF19E1B2BDE941D00C2032A /* DetailViewContoller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewContoller.swift; sourceTree = "<group>"; };
-		6CF19E212BDFB7D900C2032A /* ChangeDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeDate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,6 +125,7 @@
 			isa = PBXGroup;
 			children = (
 				6CF19E1B2BDE941D00C2032A /* DetailViewContoller.swift */,
+				1400FCBF2BE09055006AE450 /* DetailViewModel.swift */,
 			);
 			path = Detail;
 			sourceTree = "<group>";
@@ -150,7 +151,6 @@
 			isa = PBXGroup;
 			children = (
 				6CF19E0E2BDD3CC600C2032A /* Const.swift */,
-				6CF19E212BDFB7D900C2032A /* ChangeDate.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -251,9 +251,9 @@
 				6CF19E1A2BDE6B4A00C2032A /* TodoListTableCell.swift in Sources */,
 				6CF19E0F2BDD3CC600C2032A /* Const.swift in Sources */,
 				1400FCA72BDF3484006AE450 /* TodoListViewModel.swift in Sources */,
-				6CF19E222BDFB7D900C2032A /* ChangeDate.swift in Sources */,
 				6CF19E1C2BDE941D00C2032A /* DetailViewContoller.swift in Sources */,
 				1474675F2BDB38CB00A9FB86 /* AppDelegate.swift in Sources */,
+				1400FCC02BE09055006AE450 /* DetailViewModel.swift in Sources */,
 				147467612BDB38CB00A9FB86 /* SceneDelegate.swift in Sources */,
 				1400FCA52BDF3479006AE450 /* ListModel.swift in Sources */,
 				1400FCBB2BE06356006AE450 /* ViewExtension.swift in Sources */,
@@ -411,7 +411,7 @@
 				DEVELOPMENT_TEAM = P8F3338MA4;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TodoList/Info.plist;
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "앨범 접근을 허용하시겠습니까?";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -441,7 +441,7 @@
 				DEVELOPMENT_TEAM = P8F3338MA4;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TodoList/Info.plist;
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "앨범 접근을 허용하시겠습니까?";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
