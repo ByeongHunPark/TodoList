@@ -59,9 +59,6 @@ class DetailViewContoller: UIViewController{
             showToast(message: "할 일 내용은 최대 300자까지 작성할 수 있습니다.\n(\(contentTextView.text!.count)/300)")
         }
         
-        
-        
-        
     }
     
 }

@@ -15,4 +15,5 @@ class DetailViewModel {
     var create : String = ""
     var content : String = ""
     var thumbnail : UIImage?
+    
 }

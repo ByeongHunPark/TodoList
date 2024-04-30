@@ -225,6 +225,11 @@ extension AddViewController: UIImagePickerControllerDelegate, UINavigationContro
         if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage{
             print("image_info = \(pickedImage)")
             pickedImageView.image = pickedImage
+            
+            if let imageUrl = info[UIImagePickerController.InfoKey.imageURL] as? URL {
+                let imageName = imageUrl.lastPathComponent
+                print("Image Name: \(imageName)")
+            }
         }
         imageView.isHidden = false
         

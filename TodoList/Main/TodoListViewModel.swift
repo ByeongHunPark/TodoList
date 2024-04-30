@@ -32,6 +32,7 @@ class TodoListViewModel {
             reloadData?()
         }
     }
+    
     var reloadData: (() -> Void)?
     
     var filteredTodoList: [ListModel] = []
