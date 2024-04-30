@@ -1,22 +1,19 @@
-////
-////  TodoAPI.swift
-////  TodoList
-////
-////  Created by 박병훈 on 4/27/24.
-////
 //
+//  TodoAPI.swift
+//  TodoList
+//
+//  Created by 박병훈 on 4/27/24.
+//
+
 import Foundation
 import UIKit
 import SwiftyJSON
 import Alamofire
-//
+
 class TodoAPI: ObservableObject{
     
     static let shared = TodoAPI()
     let baseUrl = Const.APIAddr
-//    private init(){
-//        
-//    }
     
     func downloadImage(from url: URL, completion: @escaping (UIImage?) -> Void) {
         AF.request(url).responseData { response in
@@ -130,7 +127,7 @@ class TodoAPI: ObservableObject{
     
     func addTodo(assignee: String , content: String, imageFile: UIImage, imageName: String,completion: @escaping (String) -> Void){
         guard let imageData = imageFile.jpegData(compressionQuality: 1.0) else {
-            print("이미지 데이터를 변환하는 데 문제가 있습니다.")
+            completion("실패")
             return
         }
         
@@ -140,7 +137,7 @@ class TodoAPI: ObservableObject{
         AF.upload(multipartFormData: { multipartFormData in
             multipartFormData.append(Data(assignee.utf8), withName: "assignee")
             multipartFormData.append(Data(content.utf8), withName: "content")
-            multipartFormData.append(imageData, withName: "imageFile", fileName: "image/\(imageName)", mimeType: "image/jpeg")
+            multipartFormData.append(imageData, withName: "imageFile", fileName: "image.jpeg", mimeType: "image/jpeg")
         }, to: url, method: .post)
         .validate()
         .responseData { response in

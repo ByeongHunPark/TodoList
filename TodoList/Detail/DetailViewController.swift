@@ -22,24 +22,41 @@ class DetailViewController: UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+           
         assigneeTextField.delegate = self
         contentTextView.delegate = self
         
         self.hideKeyboardWhenTappedAround()
         
-        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
         setLayout()
     }
     
     private func setLayout(){
+        
+        if let navController = navigationController {
+            if navController.viewControllers.count > 1 {
+                let backButton = UIButton(type: .custom)
+                backButton.setImage(UIImage(systemName: "chevron.left"), for: .normal)
+                backButton.setTitle("뒤로", for: .normal)
+                backButton.setTitleColor(UIColor.systemBlue, for: .normal)
+                backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+                backButton.sizeToFit()
+                
+                let backButtonItem = UIBarButtonItem(customView: backButton)
+                navigationItem.leftBarButtonItem = backButtonItem
+            }
+        }
         
         assigneeTextField.text = vm.assignee
         contentTextView.text = vm.content
         createTextField.text = vm.create
         thumbnailImage.image = vm.thumbnail
         
-        createTextField.isUserInteractionEnabled = false
+        createTextField.isEnabled = false
+        createTextField.backgroundColor = UIColor.systemGray5
+        createTextField.layer.borderWidth = 0.4
+        createTextField.layer.borderColor = UIColor.systemGray3.cgColor
+        createTextField.layer.cornerRadius = 5
         
         contentTextView.layer.borderWidth = 0.4
         contentTextView.layer.borderColor = UIColor.systemGray4.cgColor
@@ -56,8 +73,21 @@ class DetailViewController: UIViewController{
         
     }
     
+    @objc func backButtonTapped() {
+        if assigneeTextField.text! != vm.assignee || contentTextView.text != vm.content {
+            let confirmAction = UIAlertAction(title: "확인", style: .default) { _ in
+                self.navigationController?.popViewController(animated: true)
+            }
+            
+            showAlert("수정중인 내용이 있습니다.\n이대로 진행할까요?", confirmAction)
+        } else {
+            self.navigationController?.popViewController(animated: true)
+        }
+    }
+    
     @IBAction func cancelBtnClicked(_ sender: Any) {
         self.navigationController?.popViewController(animated: true)
+        
     }
     
     @IBAction func addBtnClicked(_ sender: Any) {
@@ -71,7 +101,8 @@ class DetailViewController: UIViewController{
             return
         }
         
-        if assigneeTextField.text! != vm.assignee && contentTextView.text != vm.content{
+        if assigneeTextField.text! != vm.assignee || contentTextView.text != vm.content{
+
             TodoAPI.shared.editDetail(id: vm.id,
                                       assignee: assigneeTextField.text!,
                                       content: contentTextView.text) { [self] result, status in
@@ -156,18 +187,4 @@ extension DetailViewController: UITextFieldDelegate, UITextViewDelegate{
     
 }
 
-extension DetailViewController: UIGestureRecognizerDelegate {
-    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        
-        let confirmAction = UIAlertAction(title: "확인", style: .default) { _ in
-            print("확인")
-//            self.navigationController?.popViewController(animated: true)
-            self.dismiss(animated: true, completion: nil)
-        }
-        
-        showAlert("수정중인 내용이 있습니다.\n이대로 진행할까요?", confirmAction)
-        
-        return true
-    }
-    
-}
+

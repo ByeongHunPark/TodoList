@@ -120,34 +120,33 @@ class AddViewController: UIViewController {
     }
     
     @IBAction func addBtnClicked(_ sender: Any) {
-//        if assigneeTextField.text!.count > 20 || contentTextView.text.count > 300{
-//            let message = assigneeTextField.text!.count > 20 ? "담당자 명은 최대 20자까지 작성할 수 있습니다.\n(\(assigneeTextField.text!.count)/20)" : "할 일 내용은 최대 300자까지 작성할 수 있습니다.\n(\(contentTextView.text!.count)/300)"
-//            
-//            showToast(message: message)
-//            
-//            return
-//        }
-//        
-//        
-//        if assigneeTextField.text != "" && !assigneeTextField.text!.isEmpty && (contentTextView.text != "" && contentTextView.text != vm.textViewPlaceHolder) && (!contentTextView.text!.isEmpty  && contentTextView.text != vm.textViewPlaceHolder) && pickedImageView.image != nil{
-//            
-//            TodoAPI.shared.addTodo(assignee: assigneeTextField.text!,
-//                                   content: contentTextView.text,
-//                                   imageFile: pickedImageView.image!,
-//                                   imageName: vm.imageName) { result in
-//                if result != "실패"{
+        if assigneeTextField.text!.count > 20 || contentTextView.text.count > 300{
+            let message = assigneeTextField.text!.count > 20 ? "담당자 명은 최대 20자까지 작성할 수 있습니다.\n(\(assigneeTextField.text!.count)/20)" : "할 일 내용은 최대 300자까지 작성할 수 있습니다.\n(\(contentTextView.text!.count)/300)"
+            
+            showToast(message: message)
+            
+            return
+        }
+        
+        
+        if assigneeTextField.text != "" && !assigneeTextField.text!.isEmpty && (contentTextView.text != "" && contentTextView.text != vm.textViewPlaceHolder) && (!contentTextView.text!.isEmpty  && contentTextView.text != vm.textViewPlaceHolder) && pickedImageView.image != nil{
+            
+            TodoAPI.shared.addTodo(assignee: assigneeTextField.text!,
+                                   content: contentTextView.text,
+                                   imageFile: pickedImageView.image!,
+                                   imageName: vm.imageName) { result in
+                if result != "실패"{
                     self.dismiss(animated: true)
-                    self.sendDelegate?.sendId("ㅁㄴㅇ")
-//                    self.sendDelegate?.sendId(result)
-//                }else{
-//                    self.showToast(message: "추가에 실패하셨습니다.")
-//                }
-//            }
-//        }else{
-//            let message = assigneeTextField.text == "" ? "assignee" : (contentTextView.text != "" && contentTextView.text != vm.textViewPlaceHolder) ? "content" : "image"
-//            
-//            showToast(message: "\(message)는 필수 항목입니다.")
-//        }
+                    self.sendDelegate?.sendId(result)
+                }else{
+                    self.showToast(message: "추가에 실패하셨습니다.")
+                }
+            }
+        }else{
+            let message = assigneeTextField.text == "" ? "assignee" : (contentTextView.text != "" && contentTextView.text != vm.textViewPlaceHolder) ? "content" : "image"
+            
+            showToast(message: "\(message)는 필수 항목입니다.")
+        }
     }
     
     @IBAction func cancelBtnClicked(_ sender: Any) {
@@ -247,12 +246,10 @@ extension AddViewController: UITextFieldDelegate, UITextViewDelegate{
 extension AddViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate{
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage{
-            print("image_info = \(pickedImage)")
             pickedImageView.image = pickedImage
             
             if let imageUrl = info[UIImagePickerController.InfoKey.imageURL] as? URL {
                 let imageName = imageUrl.lastPathComponent
-                print("Image Name: \(imageName)")
                 vm.imageName = imageName
             }
         }

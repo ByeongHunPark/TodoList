@@ -9,9 +9,10 @@ import UIKit
 import SnapKit
 
 class TodoListViewController: UIViewController {
-    @IBOutlet var textFieldView : UIView!
-    @IBOutlet var textField : UITextField!
-    @IBOutlet var todoListTabelView : UITableView!
+    @IBOutlet weak var textFieldView : UIView!
+    @IBOutlet weak var textBgView: UIView!
+    @IBOutlet weak var textField : UITextField!
+    @IBOutlet weak var todoListTabelView : UITableView!
     
     var activityIndicator: UIActivityIndicatorView!
     let overlayView = UIView(frame: UIScreen.main.bounds)
@@ -41,17 +42,16 @@ class TodoListViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        print("willAppear")
         vm.todoList = []
         vm.page = 1
         indicatorStart(true)
         fetchTodoList()
         
     }
-
+    
     private func setLayout(){
         textFieldView.snp.makeConstraints { make in
-            make.left.right.equalToSuperview()
+            make.left.right.bottom.equalToSuperview()
             make.height.equalTo(58)
         }
         
@@ -59,6 +59,13 @@ class TodoListViewController: UIViewController {
         textFieldView.layer.shadowColor = UIColor.black.cgColor
         textFieldView.layer.shadowOffset = CGSize(width: 0, height: -1)
         textFieldView.layer.shadowOpacity = 0.6
+        
+        textBgView.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.left.equalToSuperview()
+            make.right.equalToSuperview()
+            make.height.equalTo(58)
+        }
         
         textField.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(8)
@@ -90,7 +97,7 @@ class TodoListViewController: UIViewController {
     func fetchTodoList(_ assignee: String? = nil) {
         guard !vm.isFetching else { return }
         vm.isFetching = true
-        
+        indicatorStart(true)
         if assignee == nil{
             TodoAPI.shared.list(page: vm.page) { [weak self] result in
                 guard let self = self else { return }
@@ -101,6 +108,7 @@ class TodoListViewController: UIViewController {
                 DispatchQueue.main.async {
                     self.todoListTabelView.reloadData()
                     self.vm.isFetching = false
+                    self.indicatorStart(false)
                 }
             }
         }else{
@@ -113,6 +121,7 @@ class TodoListViewController: UIViewController {
                 DispatchQueue.main.async {
                     self.todoListTabelView.reloadData()
                     self.vm.isFetching = false
+                    self.indicatorStart(false)
                 }
             }
         }
@@ -129,22 +138,34 @@ class TodoListViewController: UIViewController {
     }
     
     @objc func keyboardDidShow(notification: Notification){
-        
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue{
-            if vm.textFieldViewYValue == 0{
-                vm.textFieldViewYValue = self.textFieldView.frame.origin.y
+            if vm.textBgViewYValue == 0{
+                vm.textBgViewYValue = self.textBgView.frame.origin.y
             }
             
-            if self.textFieldView.frame.origin.y == vm.textFieldViewYValue{
-                vm.textFieldViewYValue = self.textFieldView.frame.origin.y
-                self.textFieldView.frame.origin.y -= keyboardSize.height
+            if vm.textFieldViewYValue == 0 {
+                vm.textFieldViewYValue = self.textField.frame.origin.y
+            }
+            
+            if self.textBgView.frame.origin.y == vm.textBgViewYValue{
+                vm.textBgViewYValue = self.textBgView.frame.origin.y
+                self.textBgView.frame.origin.y -= keyboardSize.height
+            }
+            
+            if self.textField.frame.origin.y == vm.textFieldViewYValue{
+                vm.textFieldViewYValue = self.textField.frame.origin.y
+                self.textField.frame.origin.y -= keyboardSize.height
             }
         }
     }
     
     @objc func keyboardWillHide(notification: Notification){
-        if self.textFieldView.frame.origin.y != vm.textFieldViewYValue{
-            self.textFieldView.frame.origin.y = vm.textFieldViewYValue
+        if self.textBgView.frame.origin.y != vm.textBgViewYValue{
+            self.textBgView.frame.origin.y = vm.textBgViewYValue
+        }
+        
+        if self.textField.frame.origin.y != vm.textFieldViewYValue{
+            self.textField.frame.origin.y = vm.textFieldViewYValue
         }
     }
     
@@ -163,24 +184,21 @@ class TodoListViewController: UIViewController {
 extension TodoListViewController: UITextFieldDelegate{
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool{
-        if vm.page != 1{
-            vm.page = 1
+        if textField.text != ""{
+            if vm.page != 1{
+                vm.page = 1
+            }
+            
+            filterTodoList(assignee: textField.text)
         }
         
         textField.resignFirstResponder()
-        filterTodoList(assignee: textField.text)
+        
         return true
     }
     
     private func filterTodoList(assignee: String?) {
-//        guard let assignee = assignee, !assignee.isEmpty else {
-//            vm.filteredTodoList = vm.todoList
-//            todoListTabelView.reloadData()
-//            return
-//        }
-//        
-//        let lowercaseAssignee = assignee.lowercased()
-//        vm.filteredTodoList = vm.todoList.filter { $0.assignee.lowercased().contains(lowercaseAssignee) }
+        self.vm.todoList = []
         
         fetchTodoList(assignee)
         
@@ -192,24 +210,20 @@ extension TodoListViewController: UITableViewDelegate, UITableViewDataSource, UI
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         vm.tableCount = vm.todoList.count
         
-//        return vm.tableCount
-        return 1
+        return vm.tableCount
     }
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "list_cell") as! TodoListTableCell
         
-//        let formattedDateString = convertDateString(self.vm.todoList[indexPath.row].create_at)
-//        cell.assignee.text = self.vm.todoList[indexPath.row].assignee
-//        cell.content.text = self.vm.todoList[indexPath.row].content
-//        cell.create_at.text = formattedDateString
-//        cell.thumbnail.image = self.vm.todoList[indexPath.row].thumbnail
-        
-        cell.assignee.text = "qqweqweqwe"
-        cell.content.text = "qwewww\naskdasddsadasddddd\naksd"
-        cell.create_at.text = "2024-04-30 19:00:00"
-        cell.thumbnail.image = UIImage(systemName: "photo")
+        if !vm.todoList.isEmpty{
+            let formattedDateString = convertDateString(self.vm.todoList[indexPath.row].create_at)
+            cell.assignee.text = self.vm.todoList[indexPath.row].assignee
+            cell.content.text = self.vm.todoList[indexPath.row].content
+            cell.create_at.text = formattedDateString
+            cell.thumbnail.image = self.vm.todoList[indexPath.row].thumbnail
+        }
         
         cell.selectionStyle = .none
         
@@ -223,37 +237,31 @@ extension TodoListViewController: UITableViewDelegate, UITableViewDataSource, UI
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let vc = storyboard?.instantiateViewController(withIdentifier: "detail") as! DetailViewController
         
-//        TodoAPI.shared.detail(id: self.vm.todoList[indexPath.row].id) { result in
-//        let formattedDateString = self.convertDateString(result.create_at)
-//            vc.vm.assignee = result.assignee
-//            vc.vm.content = result.content
-//            vc.vm.create = formattedDateString!
-//            vc.vm.thumbnail = result.thumbnail
-//        }
-        
-        vc.vm.assignee = "qqweqweqwe"
-        vc.vm.content = "qwewwwnasd\naklsddd\nasdㅁdd"
-        vc.vm.create = "2024-04-30 19:00:00"
-        vc.vm.thumbnail = UIImage(systemName: "photo")
-        
-        self.navigationController?.pushViewController(vc, animated: true)
+        TodoAPI.shared.detail(id: self.vm.todoList[indexPath.row].id) { result in
+            let formattedDateString = self.convertDateString(result.create_at)
+            vc.vm.id = result.id
+            vc.vm.assignee = result.assignee
+            vc.vm.content = result.content
+            vc.vm.create = formattedDateString!
+            vc.vm.thumbnail = result.thumbnail
+            
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
     }
     
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         
-//        if textField.text == "" && textField.text!.isEmpty{
-            guard let lastIndexPath = indexPaths.last,
-                  lastIndexPath.row == vm.todoList.count - 1 else {
-                return
-            }
-            
-            if textField.text == "" && textField.text!.isEmpty{
-                fetchTodoList()
-            }else{
-                fetchTodoList(self.textField.text)
-            }
-            
-//        }
+        guard let lastIndexPath = indexPaths.last,
+              lastIndexPath.row == vm.todoList.count - 1 else {
+            return
+        }
+        
+        if textField.text == "" && textField.text!.isEmpty{
+            fetchTodoList()
+        }else{
+            fetchTodoList(self.textField.text)
+        }
+        
         
     }
     
@@ -268,19 +276,13 @@ extension TodoListViewController: SendDelegate{
         let vc = storyboard?.instantiateViewController(withIdentifier: "detail") as! DetailViewController
         
         TodoAPI.shared.detail(id: id) { result in
-            print(result)
-            
             let formattedDateString = self.convertDateString(result.create_at)
+            vc.vm.id = result.id
             vc.vm.assignee = result.assignee
             vc.vm.content = result.content
             vc.vm.create = formattedDateString!
             vc.vm.thumbnail = result.thumbnail
         }
-        
-//        vc.vm.assignee = "qqweqweqwe"
-//        vc.vm.content = "qwewww\n\n\n\n\n\n\n\n\n\nasd"
-//        vc.vm.create = "2024-04-30 19:00:00"
-//        vc.vm.thumbnail = UIImage(systemName: "photo")
         
         self.navigationController?.pushViewController(vc, animated: true)
     }
